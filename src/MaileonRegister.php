@@ -16,14 +16,14 @@ class MaileonRegister {
     private ContactsService $contactsService;
     private OptInPermissionMapper $permissionMapper;
 
-    private string $BASE_URL = 'http://localhost:5555';
+    private string $BASE_URI = 'https://api.maileon.com/1.0';
 
     public function __construct(string $api_key) {
         $this->api_key = $api_key;
 
         $config = array(
-            'BASE_URI' => 'http://localhost:5555',
-            'API_KEY' => 'XX-XXXX-XX'
+            'BASE_URI' => 'https://api.maileon.com/1.0',
+            'API_KEY' =>  \Configuration::get(ConfigOptions::XQMAILEON_API_KEY)
         );
         $this->contactsService = new ContactsService($config);
         $this->permissionMapper = new OptInPermissionMapper();
@@ -33,7 +33,7 @@ class MaileonRegister {
     {
         $contact = CustomerContactMapper::map($customer);
         try {
-            $this->contactsService->createContact(
+            $result = $this->contactsService->createContact(
                 $contact,
                 SynchronizationMode::$UPDATE,
                 "Prestashop Plugin",
@@ -43,7 +43,13 @@ class MaileonRegister {
                 Configuration::get(ConfigOptions::XQMAILEON_DOI_KEY)
             );
         } catch (\Throwable $th) {
+
         }
+    }
+
+
+    public function updateCustomerEmail(\Customer $customer, string $oldMail) {
+        $this->contactsService->updateContactByEmail($oldMail, CustomerContactMapper::map($customer));
     }
 
     public function updateContact(\Customer $customer) {
@@ -53,6 +59,6 @@ class MaileonRegister {
 
     public function removeContact(\Customer $customer)
     {
-        # TODO remove customer
+        $this->contactsService->deleteContactByEmail($customer->email);
     }
 }

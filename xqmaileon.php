@@ -41,6 +41,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Message\ResponseInterface;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
+use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -55,6 +56,7 @@ class Xqmaileon extends Module
     protected $registerer;
 
     public static string $NEWSLETTER_FIELD = 'newsletter';
+    public static string $CONTACT_FORM_MARKER_FIELD = 'XQM_CONTACT_FORM_MARKER_FIELD';
 
     public function __construct()
 
@@ -95,20 +97,25 @@ class Xqmaileon extends Module
     {
         Configuration::updateValue('XQMAILEON_LIVE_MODE', false);
 
+        Configuration::updateValue(ConfigOptions::XQMAILEON_CRON_TOKEN, Tools::passwdGen(16));
+        Configuration::updateValue(ConfigOptions::XQMAILEON_WEBHOOK_TOKEN, Tools::passwdGen(16));
+
         return parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('backOfficeHeader') &&
             $this->registerHook('additionalCustomerFormFields') &&
             $this->registerHook('actionCustomerAccountAdd') &&
             $this->registerHook('actionCustomerAccountUpdate') &&
-            $this->registerHook('actionObjectCustomerUpdateBefore');
+            $this->registerHook('actionObjectCustomerUpdateBefore') &&
+            AbandonedCartService::installDatabase();
     }
 
     public function uninstall()
     {
         Configuration::deleteByName('XQMAILEON_LIVE_MODE');
 
-        return parent::uninstall();
+        return parent::uninstall() &&
+            AbandonedCartService::uninstallDatabase();
     }
 
     /**
@@ -150,6 +157,9 @@ class Xqmaileon extends Module
 
 
         $this->context->smarty->assign('api_success', $api_success);
+        $cron_hint = $this->context->link->getModuleLink($this->name, 'cron', array('token' => Configuration::get(ConfigOptions::XQMAILEON_CRON_TOKEN)), Configuration::get('PS_SSL_ENABLED'));
+
+        $this->context->smarty->assign('cron_token', $cron_hint);
 
         $output .= $this->context->smarty->fetch($this->local_path . 'views/templates/admin/api-test.tpl');
 
@@ -202,6 +212,10 @@ class Xqmaileon extends Module
                 ->setType('checkbox')
                 ->setLabel($this->l('Möchten Sie unseren Newsletter abbonieren?'));
         }
+        $additionalFields[] = (new FormField)
+            ->setName(Xqmaileon::$CONTACT_FORM_MARKER_FIELD)
+            ->setType('hidden')
+            ->setValue(1);
         return $additionalFields;
     }
 
@@ -228,8 +242,13 @@ class Xqmaileon extends Module
      */
     public function hookActionObjectCustomerUpdateBefore($params)
     {
+        # return if not submitted from customer account from,
+        # customer objects may be modified by other parties and not considered
+        # for this plugin
+        if (!Tools::isSubmit(Xqmaileon::$CONTACT_FORM_MARKER_FIELD)) return;
 
         /**
+         * The new value of the customer object that will be written in the update.
          * @var Customer
          */
         $customer = $params['object'];
@@ -249,11 +268,9 @@ class Xqmaileon extends Module
         if ($new_newsletter_state == true && $old_newsletter_state == false) {
             if (Configuration::get(ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION) == 1) {
                 $customer->optin = true;
-                $this->registerer->addContact($customer);
-            } else {
-                $this->registerer->addContact($customer);
             }
-            
+
+            $this->registerer->addContact($customer);
             $customer->newsletter = true;
         }
 
@@ -261,10 +278,12 @@ class Xqmaileon extends Module
         if ($new_newsletter_state == false && $old_newsletter_state == true) {
             $this->registerer->removeContact($customer);
             $customer->newsletter = false;
+            $customer->optin = false;
         }
 
         if ($new_email != $old_email && !empty($old_email) && !$customer->isGuest()) {
-            # email updated, check with update options
+            $customer->optin = (Configuration::get(ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION) == 1);
+            $this->registerer->updateCustomerEmail($customer, $old_email);
         }
 
 

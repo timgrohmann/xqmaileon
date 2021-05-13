@@ -44,3 +44,14 @@
     </div>
 
 </div>
+
+<div class="panel">
+    <h3><i class="material-icons mi-input">timer</i> {l s='Cron-Job einrichten' mod='xqmaileon'}</h3>
+    <p>
+        Um automatisch nach Warenkorbabbrechern zu suchen, richten Sie in ihrem System einen Cronjob ein, der folgende URL abruft:
+    </p>
+    <p class="center">
+    {$cron_token}
+
+    </p>
+</div>

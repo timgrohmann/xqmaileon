@@ -5,7 +5,7 @@ namespace PrestaShop\Module\XQMaileon\Mapper;
 use de\xqueue\maileon\api\client\contacts\Contact;
 use de\xqueue\maileon\api\client\contacts\Permission;
 use de\xqueue\maileon\api\client\contacts\StandardContactField;
-
+use de\xqueue\maileon\api\client\transactions\ContactReference;
 use PrestaShop\PrestaShop\Adapter\Entity\Context;
 
 class CustomerContactMapper {
@@ -45,6 +45,17 @@ class CustomerContactMapper {
             $contact->standard_fields[StandardContactField::$ZIP] = $address['postcode'];
         }
 
+        return $contact;
+    }
+
+    /**
+     * @return ContactReference
+     */
+    public static function mapToContactReference(\Customer $customer)
+    {
+        $contact = new ContactReference();
+        $contact->email = $customer->email;
+        
         return $contact;
     }
 

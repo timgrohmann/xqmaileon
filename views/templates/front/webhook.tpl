@@ -1,0 +1,1 @@
+{$myarray|@json_encode nofilter}

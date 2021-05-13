@@ -25,7 +25,7 @@
 */
 $sql = array();
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'xqmaileon` (
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'xqmaileon_` (
     `id_xqmaileon` int(11) NOT NULL AUTO_INCREMENT,
     PRIMARY KEY  (`id_xqmaileon`)
 ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8;';
