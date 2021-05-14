@@ -46,12 +46,32 @@
 </div>
 
 <div class="panel">
-    <h3><i class="material-icons mi-input">timer</i> {l s='Cron-Job einrichten' mod='xqmaileon'}</h3>
+    <h3><i class="material-icons mi-input">timer</i> {l s='Cron-Job für Warenkorbabbrecher einrichten' mod='xqmaileon'}</h3>
     <p>
         Um automatisch nach Warenkorbabbrechern zu suchen, richten Sie in ihrem System einen Cronjob ein, der folgende URL abruft:
     </p>
     <p class="center">
-    {$cron_token}
-
+        {$cron_token}
     </p>
+</div>
+
+<div class="panel">
+    <h3><i class="material-icons mi-input">world</i> {l s='Webhooks einrichten' mod='xqmaileon'}</h3>
+    <p>
+        Damit Maileon Informationen an Prestashop senden kann, richten Sie bitte in Maileon folgende Webhooks ein.
+    </p>
+    <table class="table">
+        <tr>
+            <th>Typ</th>
+            <th>Webhook-URI</th>
+        </tr>
+        <tr>
+            <td>DOI-Bestätigung</td>
+            <td>{$webhook_doi_confirm}</td>
+        </tr>
+        <tr>
+            <td>Abmeldung</td>
+            <td>{$webhook_unsubscribe}</td>
+        </tr>
+    </table>
 </div>

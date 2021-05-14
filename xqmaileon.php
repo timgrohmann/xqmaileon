@@ -32,7 +32,6 @@ use PrestaShop\Module\XQMaileon\MaileonRegister;
 use PrestaShop\Module\XQMaileon\Configure\XQConfigureForm;
 
 use PrestaShop\PrestaShop\Adapter\Entity\Configuration;
-use PrestaShop\PrestaShop\Adapter\Entity\HelperForm;
 use PrestaShop\PrestaShop\Adapter\Entity\Module;
 use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 use PrestaShop\PrestaShop\Adapter\Entity\Customer;
@@ -41,7 +40,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Message\ResponseInterface;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
-use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartService;
+use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartTransactionService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -107,7 +106,7 @@ class Xqmaileon extends Module
             $this->registerHook('actionCustomerAccountAdd') &&
             $this->registerHook('actionCustomerAccountUpdate') &&
             $this->registerHook('actionObjectCustomerUpdateBefore') &&
-            AbandonedCartService::installDatabase();
+            AbandonedCartTransactionService::installDatabase();
     }
 
     public function uninstall()
@@ -115,7 +114,7 @@ class Xqmaileon extends Module
         Configuration::deleteByName('XQMAILEON_LIVE_MODE');
 
         return parent::uninstall() &&
-            AbandonedCartService::uninstallDatabase();
+            AbandonedCartTransactionService::uninstallDatabase();
     }
 
     /**
@@ -160,6 +159,13 @@ class Xqmaileon extends Module
         $cron_hint = $this->context->link->getModuleLink($this->name, 'cron', array('token' => Configuration::get(ConfigOptions::XQMAILEON_CRON_TOKEN)), Configuration::get('PS_SSL_ENABLED'));
 
         $this->context->smarty->assign('cron_token', $cron_hint);
+
+        $webhookToken = Configuration::get(ConfigOptions::XQMAILEON_WEBHOOK_TOKEN);
+        $webhookDoiConfirm = $this->context->link->getModuleLink($this->name, 'webhook', array('token' => $webhookToken, 'type' => 'doi'), Configuration::get('PS_SSL_ENABLED'));
+        $webhookUnsubscribe = $this->context->link->getModuleLink($this->name, 'webhook', array('token' => $webhookToken, 'type' => 'unsubscribe'), Configuration::get('PS_SSL_ENABLED'));
+
+        $this->context->smarty->assign('webhook_doi_confirm', $webhookDoiConfirm);
+        $this->context->smarty->assign('webhook_unsubscribe', $webhookUnsubscribe);
 
         $output .= $this->context->smarty->fetch($this->local_path . 'views/templates/admin/api-test.tpl');
 

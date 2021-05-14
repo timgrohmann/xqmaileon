@@ -32,7 +32,6 @@ class XQConfigureForm
         $helper->currentIndex = \AdminController::$currentIndex . '&configure=' . $this->module->name;
         $helper->token = \Tools::getAdminTokenLite('AdminModules');
 
-        dump($this->getConfigFormValues());
         $helper->tpl_vars = array(
             'fields_value' => $this->getConfigFormValues(), /* Add values for your inputs */
             'languages' => $context->controller->getLanguages(),
@@ -41,6 +40,7 @@ class XQConfigureForm
 
         return $helper->generateForm(array($this->getConfigForm()));
     }
+
 
     /**
      * Create the structure of your form.
@@ -55,23 +55,11 @@ class XQConfigureForm
                 ),
                 'input' => array(
                     array(
-                        'type' => 'switch',
-                        'label' => $this->module->l('Live mode'),
-                        'name' => ConfigOptions::XQMAILEON_LIVE_MODE,
-                        'is_bool' => true,
-                        'desc' => $this->module->l('Use this module in live mode'),
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => true,
-                                'label' => $this->module->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => false,
-                                'label' => $this->module->l('Disabled')
-                            )
-                        ),
+                        'type' => 'text',
+                        'prefix' => '<i class="material-icons mi-input">vpn_key</i>',
+                        'desc' => $this->module->l('Enter your Maileon API Key.'),
+                        'name' => ConfigOptions::XQMAILEON_API_KEY,
+                        'label' => $this->module->l('API-Key'),
                     ),
                     array(
                         'type' => 'select',
@@ -89,12 +77,6 @@ class XQConfigureForm
                         'prefix' => '<i class="material-icons mi-input">mail</i>',
                         'name' => ConfigOptions::XQMAILEON_DOI_KEY,
                         'label' => $this->module->l('DOI-Schlüssel'),
-                    ),
-                    array(
-                        'type' => 'text',
-                        'prefix' => '<i class="material-icons mi-input">insert_link</i>',
-                        'name' => ConfigOptions::XQMAILEON_WEBHOOK_TOKEN,
-                        'label' => $this->module->l('Webhook-Token'),
                     ),
                     array(
                         'type' => 'switch',
@@ -155,11 +137,38 @@ class XQConfigureForm
                         ),
                     ),
                     array(
-                        'type' => 'text',
-                        'prefix' => '<i class="material-icons mi-input">vpn_key</i>',
-                        'desc' => $this->module->l('Enter your Maileon API Key.'),
-                        'name' => ConfigOptions::XQMAILEON_API_KEY,
-                        'label' => $this->module->l('API-Key'),
+                        'type' => 'select',
+                        'prefix' => '<i class="material-icons mi-input">timer</i>',
+                        'name' => ConfigOptions::XQMAILEON_ABANDONED_TIME,
+                        'label' => $this->module->l('Warenkorbabbrecher-Timer'),
+                        'type' => 'select',
+                        'col' => 6,
+                        'options' => array(
+                            'query' => array(
+                                array(
+                                    'id_option' => 5,
+                                    'name' => '5 Minuten'
+                                ),
+                                array(
+                                    'id_option' => 15,
+                                    'name' => '15 Minuten'
+                                ),
+                                array(
+                                    'id_option' => 30,
+                                    'name' => '30 Minuten'
+                                ),
+                                array(
+                                    'id_option' => 60,
+                                    'name' => '60 Minuten'
+                                ),
+                                array(
+                                    'id_option' => null,
+                                    'name' => 'inaktiv'
+                                ),
+                            ),
+                            'id' => 'id_option',
+                            'name' => 'name'
+                        ),
                     ),
                 ),
                 'submit' => array(

@@ -2,17 +2,21 @@
 
 namespace PrestaShop\Module\XQMaileon\Transactions;
 
+use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
+use PrestaShop\Module\XQMaileon\Mapper\OptInPermissionMapper;
 use PrestaShop\Module\XQMaileon\Model\AbandonedCart;
 use PrestaShop\Module\XQMaileon\Model\Transaction\AbandonedCartTransaction;
 
-class AbandonedCartTransactionService extends AbstractTransactionService
+class AbandonedCartTransactionService extends AbstractTransactionService implements CronTransactionServiceInterface
 {
 
     const ABANDONED_CART_NOTIFIED_TABLE_NAME = 'xqm_abandoned_cart_notified';
 
-    public function notify()
+    public function trigger(): array
     {
-        $carts = $this->findAbandonedCarts();
+        $timer = \Configuration::get(ConfigOptions::XQMAILEON_ABANDONED_TIME);
+        if (empty($timer) || empty(intval($timer))) return ['error' => 'Timer not set', 'timer' => $timer];
+        $carts = $this->findAbandonedCarts(intval($timer));
         $successCount = 0;
         $failCount = 0;
         foreach ($carts as $cart) {
@@ -26,7 +30,8 @@ class AbandonedCartTransactionService extends AbstractTransactionService
         }
         return [
             'succeeded' => $successCount,
-            'failed' => $failCount
+            'failed' => $failCount,
+            'timer' => $timer
         ];
     }
 
@@ -50,7 +55,7 @@ class AbandonedCartTransactionService extends AbstractTransactionService
     /**
      * @return AbandonedCart[]
      */
-    private function findAbandonedCarts()
+    private function findAbandonedCarts(int $timer)
     {
         # selects newest cart the customer created but not ordered
         # also does not select cart if customer ordered another card afterwars
@@ -71,7 +76,8 @@ class AbandonedCartTransactionService extends AbstractTransactionService
             WHERE r.rn = 1
             AND o.id_order IS NULL
             AND n.id_notification IS NULL
-            AND DATE_SUB(CURDATE(), INTERVAL 2 DAY) <= r.date_add
+            AND DATE_SUB(NOW(), INTERVAL 2 DAY) <= r.date_add
+            AND DATE_SUB(NOW(), INTERVAL ' . strval($timer) . ' MINUTE) > r.date_add
         ';
 
         $db = \Db::getInstance();
@@ -93,9 +99,10 @@ class AbandonedCartTransactionService extends AbstractTransactionService
         # do not process cart if customer does not exist (anymore)
         if (empty($customerForCart->email)) return false;
 
-        # only send abandoned cart notification if customer has opted in to emails
-        # TODO: Make configurable
-        if ($customerForCart->optin) {
+        # only send abandoned cart notification if customer has opted in to emails or
+        # double opt in was not configured in module settings
+        
+        if ($customerForCart->optin || !(new OptInPermissionMapper())->getCurrentHasDoubleOptIn()) {
             $cart = new \Cart($abandonedCart->id_cart);
             $cartSummary = $cart->getRawSummaryDetails(\Context::getContext()->language->id);
             $trans = new AbandonedCartTransaction($this->transactionService, $customerForCart);

@@ -13,17 +13,15 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
         $requestBodyJson = json_decode(file_get_contents('php://input'), true);
 
         $webhookResult = $this->handleWebhook($requestBodyJson);
-        if ($webhookResult !== false) {
-            $this->context->smarty->assign("myarray", $webhookResult);
-        } else {
+        if ($webhookResult === false) {
             http_response_code(400);
-            exit;
         }
 
 
         # raw json output. probably not needed for webhook but it fixes errors and is good for debugging
         header("Content-Type: application/json");
-        $this->setTemplate('module:xqmaileon/views/templates/front/webhook.tpl');
+        echo json_encode($webhookResult);
+        exit;
     }
 
     public function postProcess()
@@ -42,8 +40,6 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
                 return $this->handleDoiConfirm($body);
             case 'unsubscribe':
                 return $this->handleUnsubscribe($body);
-            case 'cartTest':
-                return $this->handleCartTest();
             default:
                 return false;
         }
@@ -63,15 +59,5 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
         $customer->optin = false;
         $customer->newsletter = false;
         return $customer->update();
-    }
-
-    public function handleCartTest()
-    {
-        $carts = (new AbandonedCartTransactionService())->notify();
-
-
-        $this->context->smarty->assign("myarray", $carts);
-
-        return $carts;
     }
 }
