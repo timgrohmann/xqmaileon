@@ -52,7 +52,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
     public function handleDoiConfirm($body) {
         $id = intval($body['external_id']);
         $customer = new \Customer($id);
-        $customer->doi = true;
+        $customer->optin = true;
         return $customer->update();
     }
 
@@ -60,7 +60,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
     {
         $id = intval($body['external_id']);
         $customer = new \Customer($id);
-        $customer->doi = false;
+        $customer->optin = false;
         $customer->newsletter = false;
         return $customer->update();
     }

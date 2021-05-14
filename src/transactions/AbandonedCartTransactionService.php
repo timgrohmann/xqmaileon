@@ -13,10 +13,21 @@ class AbandonedCartTransactionService extends AbstractTransactionService
     public function notify()
     {
         $carts = $this->findAbandonedCarts();
+        $successCount = 0;
+        $failCount = 0;
         foreach ($carts as $cart) {
-            return $this->notifyOneCart($cart);
+            $res = $this->notifyOneCart($cart);
+            if ($res) {
+                $successCount++;
+                $this->setCartNotified($cart);
+            } else {
+                $failCount++;
+            }
         }
-        #$not_not
+        return [
+            'succeeded' => $successCount,
+            'failed' => $failCount
+        ];
     }
 
     public static function installDatabase(): bool
@@ -39,7 +50,7 @@ class AbandonedCartTransactionService extends AbstractTransactionService
     /**
      * @return AbandonedCart[]
      */
-    public function findAbandonedCarts()
+    private function findAbandonedCarts()
     {
         # selects newest cart the customer created but not ordered
         # also does not select cart if customer ordered another card afterwars
@@ -72,32 +83,59 @@ class AbandonedCartTransactionService extends AbstractTransactionService
         return $all_carts;
     }
 
-    public function notifyOneCart(AbandonedCart $abandonedCart)
+    /**
+     * @return bool Returns true if the abandoned cart notification has been sent successfully
+     */
+    private function notifyOneCart(AbandonedCart $abandonedCart): bool
     {
         $customerForCart = new \Customer($abandonedCart->id_customer);
 
         # do not process cart if customer does not exist (anymore)
-        if (empty($customerForCart->email)) return;
+        if (empty($customerForCart->email)) return false;
 
         # only send abandoned cart notification if customer has opted in to emails
         # TODO: Make configurable
-        if ($customerForCart->optin || true) {
+        if ($customerForCart->optin) {
             $cart = new \Cart($abandonedCart->id_cart);
-            $products = $cart->getProducts();
+            $cartSummary = $cart->getRawSummaryDetails(\Context::getContext()->language->id);
             $trans = new AbandonedCartTransaction($this->transactionService, $customerForCart);
-            $trans->send(
+            return $trans->send(
                 [
-                    'order.id' => 'order.id',
-                    'order.date' => time(),
-                    'order.status' => 'order.status',
-                    'order.items' => array('1', '2'),
-                    'order.total' => 130.99,
-                    'order.total_tax' => 20.23,
-                    'order.total_fees' => 0.6,
-                    'order.currency' => '€'
+                    'cart' => [
+                        'id' => (string) $cart->id,
+                        'date' => $cart->date_add,
+                        'items' => $cartSummary['products'],
+                        'total' => $cartSummary['total_price'],
+                        'total_no_shipping' => $cartSummary['total_price'] - $cartSummary['total_shipping'],
+                        'total_tax' => $cartSummary['total_tax'],
+                        'total_fees' => $cartSummary['total_wrapping'] + $cartSummary['total_shipping'],
+                        'fees' => [
+                            'shipping' => $cartSummary['total_shipping'],
+                            'wrapping' => $cartSummary['total_wrapping']
+                        ],
+                        'currency' => (new \Currency($cart->id_currency))->symbol,
+                    ],
+                    'discount' => [
+                        'total' => (string) $cartSummary['total_discounts'],
+                        'rules' => $cartSummary['discounts']
+                    ],
+                    'customer' => [
+                        'fullname' => $customerForCart->firstname . ' ' . $customerForCart->lastname,
+                        'firstname' => $customerForCart->firstname,
+                        'lastname' => $customerForCart->lastname,
+                        'id' => (string) $customerForCart->id,
+                    ]
                 ]
             );
-            return $products;
+        } else {
+            trigger_error('Cannot send transaction to customer without opt-in.');
         }
+        return false;
+    }
+
+    private function setCartNotified(AbandonedCart $abandonedCart) {
+        \Db::getInstance()->insert(self::ABANDONED_CART_NOTIFIED_TABLE_NAME, [
+            'id_cart' => $abandonedCart->id_cart
+        ]);
     }
 }

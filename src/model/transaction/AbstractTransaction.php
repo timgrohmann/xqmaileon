@@ -88,6 +88,6 @@ abstract class AbstractTransaction {
         # error_log($maileonTransaction->toString());
         error_log($res->toString());
         
-        return true;
+        return $res->isSuccess();
     }
 }
