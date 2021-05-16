@@ -204,7 +204,7 @@ class Xqmaileon extends Module
             $additionalFields[] = (new FormField)
                 ->setName(Xqmaileon::$NEWSLETTER_FIELD)
                 ->setType('checkbox')
-                ->setLabel($this->l('Möchten Sie unseren Newsletter abbonieren?'));
+                ->setLabel($this->l('Do you want to subscribe to our newsletter?'));
         }
         $additionalFields[] = (new FormField)
             ->setName(Xqmaileon::$CONTACT_FORM_MARKER_FIELD)

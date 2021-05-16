@@ -34,26 +34,26 @@
             <span class="material-icons green">
                 done
             </span>
-            Der eingegebene API-Schlüssel funktioniert!
+            {l s='Great! The API key you entered works!' mod='xqmaileon'}
         {else if !$api_key_set}
             <span class="material-icons red">
                 close
             </span>
-			Bitte geben Sie einen API-Schlüssel ein.
+			{l s='Please enter an API key in the form above.' mod='xqmaileon'}
         {else}
             <span class="material-icons red">
                 close
             </span>
-			Der eingegebene API-Schlüssel funktioniert nicht. Bitte überprüfen Sie diesen erneut in Ihrem Maileon Backend.
+            {l s='The API key you entered does not work. Please check the API key in your Maileon backend.' mod='xqmaileon'}
         {/if}
     </div>
 
 </div>
 
 <div class="panel">
-    <h3><i class="material-icons mi-input">timer</i> {l s='Cron-Job für Warenkorbabbrecher einrichten' mod='xqmaileon'}</h3>
+    <h3><i class="material-icons mi-input">timer</i> {l s='Set up Cronjob for Abandoned Cart Notifications' mod='xqmaileon'}</h3>
     <p>
-        Um automatisch nach Warenkorbabbrechern zu suchen, richten Sie in ihrem System einen Cronjob ein, der folgende URL abruft:
+        {l s='Add a cron job to your system/server that calls the following URL, to enable abandoned cart notififcations.' mod='xqmaileon'}
     </p>
     <p class="center">
         {$cron_token}
@@ -61,21 +61,21 @@
 </div>
 
 <div class="panel">
-    <h3><i class="material-icons mi-input">world</i> {l s='Webhooks einrichten' mod='xqmaileon'}</h3>
+    <h3><i class="material-icons mi-input">world</i> {l s='Set up Webhooks' mod='xqmaileon'}</h3>
     <p>
-        Damit Maileon Informationen an Prestashop senden kann, richten Sie bitte in Maileon folgende Webhooks ein.
+        {l s='Please create the following webhooks in your Maileon backend to fully integrate with Prestashop.' mod='xqmaileon'}
     </p>
     <table class="table">
         <tr>
-            <th>Typ</th>
+            <th>{l s='Type' mod='xqmaileon'}</th>
             <th>Webhook-URI</th>
         </tr>
         <tr>
-            <td>DOI-Bestätigung</td>
+            <td>{l s='DOI Confirmation' mod='xqmaileon'}</td>
             <td>{$webhook_doi_confirm}</td>
         </tr>
         <tr>
-            <td>Abmeldung</td>
+            <td>{l s='Unsubscription' mod='xqmaileon'}</td>
             <td>{$webhook_unsubscribe}</td>
         </tr>
     </table>
