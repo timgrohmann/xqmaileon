@@ -24,7 +24,7 @@
 *}
 
 <div class="panel">
-	<h3><i class="icon icon-credit-card"></i> {l s='Maileon Integration' mod='xqmaileon'}</h3>
+	<h3><i class="material-icons mi-input">email</i> {l s='Maileon Integration' mod='xqmaileon'}</h3>
 	<p>
 		{l s='Use this module to connect Prestashop to Maileon.' mod='xqmaileon'}<br />
 	</p>

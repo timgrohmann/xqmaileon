@@ -24,9 +24,9 @@
 *}
 
 <div class="panel">
-    <h3><i class="material-icons mi-input">info</i> {l s='API-Anbindung testen' mod='xqmaileon'}</h3>
+    <h3><i class="material-icons mi-input">info</i> {l s='Test API-Connection' mod='xqmaileon'}</h3>
     <p>
-        {l s='Hier können Sie überprüfen, ob die angegebene Konfiguaration funktioniert.' mod='xqmaileon'}<br />
+        {l s='Check if you connected to the Maileon API successfully.' mod='xqmaileon'}<br />
     </p>
 
     <div class="center">
@@ -61,7 +61,7 @@
 </div>
 
 <div class="panel">
-    <h3><i class="material-icons mi-input">world</i> {l s='Set up Webhooks' mod='xqmaileon'}</h3>
+    <h3><i class="material-icons mi-input">public</i> {l s='Set up Webhooks' mod='xqmaileon'}</h3>
     <p>
         {l s='Please create the following webhooks in your Maileon backend to fully integrate with Prestashop.' mod='xqmaileon'}
     </p>

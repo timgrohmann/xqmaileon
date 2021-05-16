@@ -74,8 +74,8 @@ class Xqmaileon extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('XQueue Maileon');
-        $this->description = $this->l('XQueue Maileon is great.');
+        $this->displayName = $this->l('Maileon Integration');
+        $this->description = $this->l('Seamlessly integrate your marketing automation with Maileon.');
 
         $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 
