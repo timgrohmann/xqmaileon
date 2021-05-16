@@ -27,7 +27,6 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-
 use PrestaShop\Module\XQMaileon\MaileonRegister;
 use PrestaShop\Module\XQMaileon\Configure\XQConfigureForm;
 
@@ -41,6 +40,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Message\ResponseInterface;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartTransactionService;
+use PrestaShop\Module\XQMaileon\Transactions\OrderConfirmationTransactionService;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -103,12 +103,13 @@ class Xqmaileon extends Module
             $this->registerHook('actionCustomerAccountAdd') &&
             $this->registerHook('actionCustomerAccountUpdate') &&
             $this->registerHook('actionObjectCustomerUpdateBefore') &&
+            $this->registerHook('actionEmailSendBefore') &&
             AbandonedCartTransactionService::installDatabase();
     }
 
     public function uninstall()
     {
-        foreach (ConfigOptions::all_options as $k => $v) Configuration::deleteByName($k);
+        # foreach (ConfigOptions::all_options as $k => $v) Configuration::deleteByName($k);
 
         return parent::uninstall() &&
             AbandonedCartTransactionService::uninstallDatabase();
@@ -281,5 +282,16 @@ class Xqmaileon extends Module
         }
 
 
+    }
+
+    # do not send order confirmations from prestashop, use maileon instead
+    public function hookActionEmailSendBefore($params)
+    {
+        if ($params['template'] == 'order_conf') {
+            $order = new \Order($params['templateVars']['{id_order}']);
+            $service = new OrderConfirmationTransactionService();
+            return !$service->sendConfirmation($order);
+        }
+        return true;
     }
 }
