@@ -94,13 +94,10 @@ class Xqmaileon extends Module
      */
     public function install()
     {
-        Configuration::updateValue('XQMAILEON_LIVE_MODE', false);
-
         Configuration::updateValue(ConfigOptions::XQMAILEON_CRON_TOKEN, Tools::passwdGen(16));
         Configuration::updateValue(ConfigOptions::XQMAILEON_WEBHOOK_TOKEN, Tools::passwdGen(16));
 
         return parent::install() &&
-            $this->registerHook('header') &&
             $this->registerHook('backOfficeHeader') &&
             $this->registerHook('additionalCustomerFormFields') &&
             $this->registerHook('actionCustomerAccountAdd') &&
@@ -111,7 +108,7 @@ class Xqmaileon extends Module
 
     public function uninstall()
     {
-        Configuration::deleteByName('XQMAILEON_LIVE_MODE');
+        foreach (ConfigOptions::all_options as $k => $v) Configuration::deleteByName($k);
 
         return parent::uninstall() &&
             AbandonedCartTransactionService::uninstallDatabase();
@@ -156,6 +153,7 @@ class Xqmaileon extends Module
 
 
         $this->context->smarty->assign('api_success', $api_success);
+        $this->context->smarty->assign('api_key_set', !empty($key));
         $cron_hint = $this->context->link->getModuleLink($this->name, 'cron', array('token' => Configuration::get(ConfigOptions::XQMAILEON_CRON_TOKEN)), Configuration::get('PS_SSL_ENABLED'));
 
         $this->context->smarty->assign('cron_token', $cron_hint);
@@ -190,18 +188,8 @@ class Xqmaileon extends Module
     public function hookBackOfficeHeader()
     {
         if (Tools::getValue('configure') == $this->name) {
-            $this->context->controller->addJS($this->_path . 'views/js/back.js');
             $this->context->controller->addCSS($this->_path . 'views/css/back.css');
         }
-    }
-
-    /**
-     * Add the CSS & JavaScript files you want to be added on the FO.
-     */
-    public function hookHeader()
-    {
-        $this->context->controller->addJS($this->_path . '/views/js/front.js');
-        $this->context->controller->addCSS($this->_path . '/views/css/front.css');
     }
 
     public function hookAdditionalCustomerFormFields($params)

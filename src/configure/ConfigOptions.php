@@ -5,7 +5,6 @@ namespace PrestaShop\Module\XQMaileon\Configure;
 use de\xqueue\maileon\api\client\contacts\Permission;
 
 abstract class ConfigOptions {
-    const XQMAILEON_LIVE_MODE = 'XQMAILEON_LIVE_MODE';
     const XQMAILEON_API_KEY = 'XQMAILEON_API_KEY';
     const XQMAILEON_REG_CHECKOUT = 'XQMAILEON_REG_CHECKOUT';
     const XQMAILEON_PERMISSION_MODE = 'XQMAILEON_PERMISSION_MODE';
@@ -21,10 +20,9 @@ abstract class ConfigOptions {
 
     # default values
     const all_options = [
-        ConfigOptions::XQMAILEON_LIVE_MODE => true,
         ConfigOptions::XQMAILEON_API_KEY => null,
         ConfigOptions::XQMAILEON_REG_CHECKOUT => true,
-        ConfigOptions::XQMAILEON_PERMISSION_MODE => 1,
+        ConfigOptions::XQMAILEON_PERMISSION_MODE => 4,
         ConfigOptions::XQMAILEON_DOI_KEY => null,
         ConfigOptions::XQMAILEON_SEND_DOI_WITH_MAILEON => true,
         ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION => 1,

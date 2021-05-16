@@ -35,6 +35,11 @@
                 done
             </span>
             Der eingegebene API-Schlüssel funktioniert!
+        {else if !$api_key_set}
+            <span class="material-icons red">
+                close
+            </span>
+			Bitte geben Sie einen API-Schlüssel ein.
         {else}
             <span class="material-icons red">
                 close

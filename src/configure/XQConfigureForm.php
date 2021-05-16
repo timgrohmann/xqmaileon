@@ -186,7 +186,8 @@ class XQConfigureForm
     {
         $x = ConfigOptions::all_options;
         array_walk($x, function (&$v, $k) {
-            $v = \Configuration::get($k, $v);
+            # get value from config or default from options if not set
+            $v = \Configuration::get($k, null, null, null, $v);
         });
         return $x;
     }
