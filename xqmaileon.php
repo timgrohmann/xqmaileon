@@ -222,7 +222,7 @@ class Xqmaileon extends Module
          */
         $customer = $params['newCustomer'];
         if (ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_REG_CHECKOUT) && !empty(Tools::getValue(Xqmaileon::$NEWSLETTER_FIELD))) {
-            
+
             # automatically set optin on customer when they have an account and it is configured
             if (Configuration::get(ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION) == 1 && !$customer->isGuest()) {
                 $customer->optin = true;
@@ -280,8 +280,6 @@ class Xqmaileon extends Module
             $customer->optin = (Configuration::get(ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION) == 1);
             $this->registerer->updateCustomerEmail($customer, $old_email);
         }
-
-
     }
 
     # do not send order confirmations from prestashop, use maileon instead

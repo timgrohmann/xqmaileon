@@ -6,7 +6,8 @@ use Configuration;
 use de\xqueue\maileon\api\client\contacts\Permission;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 
-class OptInPermissionMapper {
+class OptInPermissionMapper
+{
     private $permission_options;
 
     public function __construct()
@@ -33,7 +34,7 @@ class OptInPermissionMapper {
 
     public function getPermissionOptions()
     {
-        return array_map(function($x) {
+        return array_map(function ($x) {
             $x["val"] = $x["xq_val"]->getCode();
             return $x;
         }, $this->permission_options);

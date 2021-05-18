@@ -4,7 +4,8 @@ namespace PrestaShop\Module\XQMaileon\Model\Transaction;
 
 use de\xqueue\maileon\api\client\transactions\DataType;
 
-class OrderConfirmationTransaction extends AbstractTransaction {
+class OrderConfirmationTransaction extends AbstractTransaction
+{
 
     public function getTypeDescription()
     {

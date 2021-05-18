@@ -39,7 +39,7 @@
             <span class="material-icons red">
                 close
             </span>
-			{l s='Please enter an API key in the form above.' mod='xqmaileon'}
+            {l s='Please enter an API key in the form above.' mod='xqmaileon'}
         {else}
             <span class="material-icons red">
                 close
@@ -51,7 +51,8 @@
 </div>
 
 <div class="panel">
-    <h3><i class="material-icons mi-input">timer</i> {l s='Set up Cronjob for Abandoned Cart Notifications' mod='xqmaileon'}</h3>
+    <h3><i class="material-icons mi-input">timer</i>
+        {l s='Set up Cronjob for Abandoned Cart Notifications' mod='xqmaileon'}</h3>
     <p>
         {l s='Add a cron job to your system/server that calls the following URL, to enable abandoned cart notififcations.' mod='xqmaileon'}
     </p>

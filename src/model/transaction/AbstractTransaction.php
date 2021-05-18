@@ -8,14 +8,12 @@ use de\xqueue\maileon\api\client\transactions\TransactionsService;
 use de\xqueue\maileon\api\client\transactions\TransactionType;
 use PrestaShop\Module\XQMaileon\Mapper\CustomerContactMapper;
 
-abstract class AbstractTransaction {
+abstract class AbstractTransaction
+{
 
     const TRANSACTION_PREFIX = 'prestashop_';
     const TRANSACTION_SUFFIX = '_1.0';
 
-    private bool $checked = false;
-
-    
     private TransactionsService $transactionService;
     protected \Customer $customer;
 
@@ -26,9 +24,16 @@ abstract class AbstractTransaction {
     }
 
     /**
-     * @return array associative array of names to type. prepend name with '!' to make explicit.
+     * Takes the class name of the instanciated class and converts it to snake_case
+     * to conform to Maileon's transaction type naming convention. Also adds prefix
+     * and suffix.
+     * 
+     * Example: AbandonedCartTransaction => prestashop_abandoned_cart_transaction_1.0
+     *
+     * @return string Formatted name
      */
-    public function getTypeName() {
+    public function getTypeName()
+    {
         $fqn = explode('\\', get_class($this));
         $name = array_pop($fqn);
         $underscored = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $name));
@@ -36,8 +41,8 @@ abstract class AbstractTransaction {
     }
 
     /**
-     * @return array associative array of names to type. prepend name with '!' to make explicit.
-     */  
+     * @return array associative array of key => type. prepend key with '!' to make explicit
+     */
     protected abstract function getTypeDescription();
 
     /**
@@ -65,11 +70,13 @@ abstract class AbstractTransaction {
 
     private function checkExistsOrCreate(): bool
     {
-        if ($this->checked) {
+        $exists = $this->transactionService->getTransactionType($this->getTypeName())->isSuccess();
+        if ($exists) {
             return true;
         }
-        $this->transactionService->createTransactionType($this->getTransactionType());
-        return !empty($this->transactionService->getTransactionType($this->getTypeName()));
+
+        $result = $this->transactionService->createTransactionType($this->getTransactionType());
+        return $result->isSuccess();
     }
 
     public function send($content): bool
@@ -85,9 +92,6 @@ abstract class AbstractTransaction {
 
         $res = $this->transactionService->createTransactions(array($maileonTransaction));
 
-        # error_log($maileonTransaction->toString());
-        error_log($res->toString());
-        
         return $res->isSuccess();
     }
 }

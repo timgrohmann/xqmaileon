@@ -5,7 +5,8 @@ namespace PrestaShop\Module\XQMaileon\Transactions;
 use de\xqueue\maileon\api\client\transactions\TransactionsService;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 
-abstract class AbstractTransactionService {
+abstract class AbstractTransactionService
+{
 
     protected TransactionsService $transactionService;
 

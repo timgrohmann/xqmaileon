@@ -4,7 +4,8 @@ namespace PrestaShop\Module\XQMaileon\Configure;
 
 use de\xqueue\maileon\api\client\contacts\Permission;
 
-abstract class ConfigOptions {
+abstract class ConfigOptions
+{
     const XQMAILEON_API_KEY = 'XQMAILEON_API_KEY';
     const XQMAILEON_REG_CHECKOUT = 'XQMAILEON_REG_CHECKOUT';
     const XQMAILEON_PERMISSION_MODE = 'XQMAILEON_PERMISSION_MODE';
@@ -28,7 +29,7 @@ abstract class ConfigOptions {
         ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION => 1,
         ConfigOptions::XQMAILEON_ABANDONED_TIME => '15'
     ];
-    
+
     public static function getOptionBool(string $key)
     {
         return !empty(\Configuration::get($key));

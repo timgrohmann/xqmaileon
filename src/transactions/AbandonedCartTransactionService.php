@@ -101,7 +101,7 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
 
         # only send abandoned cart notification if customer has opted in to emails or
         # double opt in was not configured in module settings
-        
+
         if ($customerForCart->optin || !(new OptInPermissionMapper())->getCurrentHasDoubleOptIn()) {
             $cart = new \Cart($abandonedCart->id_cart);
             $cartSummary = $cart->getRawSummaryDetails(\Context::getContext()->language->id);
@@ -140,7 +140,8 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
         return false;
     }
 
-    private function setCartNotified(AbandonedCart $abandonedCart) {
+    private function setCartNotified(AbandonedCart $abandonedCart)
+    {
         \Db::getInstance()->insert(self::ABANDONED_CART_NOTIFIED_TABLE_NAME, [
             'id_cart' => $abandonedCart->id_cart
         ]);

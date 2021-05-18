@@ -2,9 +2,11 @@
 
 namespace PrestaShop\Module\XQMaileon\Mapper;
 
-class AddressMapper {
+class AddressMapper
+{
 
-    public static function mapToArray(\Address $address) {
+    public static function mapToArray(\Address $address)
+    {
         return [
             'firstname' => $address->firstname,
             'lastname' => $address->lastname,

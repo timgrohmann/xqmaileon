@@ -9,7 +9,8 @@ use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 use PrestaShop\Module\XQMaileon\Mapper\CustomerContactMapper;
 use PrestaShop\Module\XQMaileon\Mapper\OptInPermissionMapper;
 
-class MaileonRegister {
+class MaileonRegister
+{
 
     private string $api_key;
 
@@ -18,7 +19,8 @@ class MaileonRegister {
 
     private string $BASE_URI = 'https://api.maileon.com/1.0';
 
-    public function __construct(string $api_key) {
+    public function __construct(string $api_key)
+    {
         $this->api_key = $api_key;
 
         $config = array(
@@ -43,16 +45,17 @@ class MaileonRegister {
                 Configuration::get(ConfigOptions::XQMAILEON_DOI_KEY)
             );
         } catch (\Throwable $th) {
-
         }
     }
 
 
-    public function updateCustomerEmail(\Customer $customer, string $oldMail) {
+    public function updateCustomerEmail(\Customer $customer, string $oldMail)
+    {
         $this->contactsService->updateContactByEmail($oldMail, CustomerContactMapper::map($customer));
     }
 
-    public function updateContact(\Customer $customer) {
+    public function updateContact(\Customer $customer)
+    {
         $contact = CustomerContactMapper::map($customer);
         $this->contactsService->updateContact($contact);
     }

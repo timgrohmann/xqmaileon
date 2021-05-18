@@ -6,6 +6,7 @@ use PrestaShop\Module\XQMaileon\Transactions\CronTransactionServiceInterface;
 
 class XQMaileonCronModuleFrontController extends ModuleFrontController
 {
+    # All services that will be triggered by the Cron Task
     /**
      * @var CronTransactionServiceInterface[]
      */
@@ -16,11 +17,14 @@ class XQMaileonCronModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
+        header("Content-Type: application/json");
 
         $cron_token = Tools::getValue('token', false);
         if ($cron_token == false || $cron_token != Configuration::get(ConfigOptions::XQMAILEON_CRON_TOKEN)) {
             http_response_code(400);
-            echo 'Invalid Cron Token';
+            echo json_encode([
+                'error' => 'Invalid Cron Token'
+            ]);
             exit;
         }
 
@@ -33,7 +37,6 @@ class XQMaileonCronModuleFrontController extends ModuleFrontController
             $ret[array_pop($path)] = $result;
         }
 
-        header("Content-Type: application/json");
         echo json_encode($ret);
         exit;
         # do cron stuff now

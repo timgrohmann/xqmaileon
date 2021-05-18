@@ -8,7 +8,8 @@ use de\xqueue\maileon\api\client\contacts\StandardContactField;
 use de\xqueue\maileon\api\client\transactions\ContactReference;
 use PrestaShop\PrestaShop\Adapter\Entity\Context;
 
-class CustomerContactMapper {
+class CustomerContactMapper
+{
 
     /**
      * @return Contact
@@ -38,7 +39,7 @@ class CustomerContactMapper {
         if (count($addresses) >= 1) {
             $address = $addresses[0];
             $contact->standard_fields[StandardContactField::$ADDRESS] = $address['address1'];
-            if(!empty($address['address2'])) {
+            if (!empty($address['address2'])) {
                 $contact->standard_fields[StandardContactField::$ADDRESS] .= ' ' . $address['address2'];
             }
             $contact->standard_fields[StandardContactField::$CITY] = $address['city'];
@@ -55,14 +56,15 @@ class CustomerContactMapper {
     {
         $contact = new ContactReference();
         $contact->email = $customer->email;
-        
+
         return $contact;
     }
 
     /**
      * @return Permission
      */
-    public static function mapPermission(bool $optin) {
+    public static function mapPermission(bool $optin)
+    {
         $goalPermission = (new OptInPermissionMapper())->getCurrentPermission();
         return $optin ? $goalPermission : Permission::$NONE;
     }

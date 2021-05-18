@@ -9,32 +9,33 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
+        header("Content-Type: application/json");
 
+        # request body sent by maileon is json, decode into array
         $requestBodyJson = json_decode(file_get_contents('php://input'), true);
 
         $webhookResult = $this->handleWebhook($requestBodyJson);
         if ($webhookResult === false) {
             http_response_code(400);
+            echo json_encode([
+                'error' => 'Webhook failed. Did you specify a type?'
+            ]);
+            exit;
         }
 
 
-        # raw json output. probably not needed for webhook but it fixes errors and is good for debugging
-        header("Content-Type: application/json");
+        # return webhook result which can be utilized for logging/debugging
         echo json_encode($webhookResult);
         exit;
-    }
-
-    public function postProcess()
-    {
-
     }
 
     /**
      * @return bool Returns true if webhook was handled successfully.
      */
-    public function handleWebhook($body) {
+    public function handleWebhook($body)
+    {
         $type = $_GET['type'];
-        
+
         switch ($type) {
             case 'doi':
                 return $this->handleDoiConfirm($body);
@@ -45,7 +46,8 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
         }
     }
 
-    public function handleDoiConfirm($body) {
+    public function handleDoiConfirm($body)
+    {
         $id = intval($body['external_id']);
         $customer = new \Customer($id);
         $customer->optin = true;
