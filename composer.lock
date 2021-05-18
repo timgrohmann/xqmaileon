@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "xqueue/maileon-api-client",
-            "version": "1.8.0",
+            "version": "v1.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xqueue/maileon-php-api-client.git",
-                "reference": "31f32fe5f8e962c94a1e47753fe08c82f5ccdd66"
+                "reference": "cc910be7078efbc646612c475f4bb72bc2ff2a6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xqueue/maileon-php-api-client/zipball/31f32fe5f8e962c94a1e47753fe08c82f5ccdd66",
-                "reference": "31f32fe5f8e962c94a1e47753fe08c82f5ccdd66",
+                "url": "https://api.github.com/repos/xqueue/maileon-php-api-client/zipball/cc910be7078efbc646612c475f4bb72bc2ff2a6d",
+                "reference": "cc910be7078efbc646612c475f4bb72bc2ff2a6d",
                 "shasum": ""
             },
             "require": {
@@ -61,9 +61,9 @@
             ],
             "support": {
                 "issues": "https://github.com/xqueue/maileon-php-api-client/issues",
-                "source": "https://github.com/xqueue/maileon-php-api-client/tree/1.8.0"
+                "source": "https://github.com/xqueue/maileon-php-api-client/tree/v1.8.2"
             },
-            "time": "2021-04-30T14:04:33+00:00"
+            "time": "2021-05-18T10:55:24+00:00"
         }
     ],
     "packages-dev": [],
