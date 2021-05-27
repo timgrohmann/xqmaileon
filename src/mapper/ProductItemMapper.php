@@ -18,6 +18,7 @@ class ProductItemMapper
             'title' => $product->name,
             'description' => $product->description,
             'short_description' => $product->description_short,
+            'release_date' => $product->date_add,
             'url' => $context->link->getProductLink($product),
             'image_url' => $img_url,
             'quantity' => intval($in['cart_quantity']),
