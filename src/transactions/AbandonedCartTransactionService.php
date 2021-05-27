@@ -105,7 +105,7 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
         if ($customerForCart->optin || !(new OptInPermissionMapper())->getCurrentHasDoubleOptIn()) {
             $cart = new \Cart($abandonedCart->id_cart);
             $cartSummary = $cart->getRawSummaryDetails(\Context::getContext()->language->id);
-            $trans = new AbandonedCartTransaction($this->transactionService, $customerForCart);
+            $trans = new AbandonedCartTransaction($this->transactionService, $this->contactService, $customerForCart, (new OptInPermissionMapper())->getAbandonedCartNewPermission());
             return $trans->send(
                 [
                     'cart' => [

@@ -3,6 +3,8 @@
 namespace PrestaShop\Module\XQMaileon\Transactions;
 
 use PrestaShop\Module\XQMaileon\Mapper\AddressMapper;
+use PrestaShop\Module\XQMaileon\Mapper\OptInPermissionMapper;
+use PrestaShop\Module\XQMaileon\Mapper\ProductItemMapper;
 use PrestaShop\Module\XQMaileon\Model\Transaction\OrderConfirmationTransaction;
 
 class OrderConfirmationTransactionService extends AbstractTransactionService
@@ -23,7 +25,7 @@ class OrderConfirmationTransactionService extends AbstractTransactionService
                 'date' => $order->date_add,
                 'status' => 'created',
                 'estimated_delivery_date' => $order->delivery_date,
-                'items' => $order->getCartProducts(),
+                'items' => ProductItemMapper::mapArray($order->getCartProducts()),
                 'total' => floatval($order->total_paid),
                 'total_no_shipping' => $order->total_paid - $order->total_shipping,
                 'total_tax' => $order->total_paid - $order->total_paid_tax_excl,
@@ -69,7 +71,7 @@ class OrderConfirmationTransactionService extends AbstractTransactionService
 
 
 
-        $transaction = new OrderConfirmationTransaction($this->transactionService, $customer);
+        $transaction = new OrderConfirmationTransaction($this->transactionService, $this->contactService, $customer, (new OptInPermissionMapper())->getOrderConfNewPermission());
         return $transaction->send($content);
     }
 }

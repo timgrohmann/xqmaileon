@@ -2,6 +2,9 @@
 
 namespace PrestaShop\Module\XQMaileon\Model\Transaction;
 
+use de\xqueue\maileon\api\client\contacts\ContactsService;
+use de\xqueue\maileon\api\client\contacts\Permission;
+use de\xqueue\maileon\api\client\contacts\SynchronizationMode;
 use de\xqueue\maileon\api\client\transactions\AttributeType;
 use de\xqueue\maileon\api\client\transactions\Transaction;
 use de\xqueue\maileon\api\client\transactions\TransactionsService;
@@ -15,12 +18,16 @@ abstract class AbstractTransaction
     const TRANSACTION_SUFFIX = '_1.0';
 
     private TransactionsService $transactionService;
+    private ContactsService $contactService;
     protected \Customer $customer;
+    private Permission $permission;
 
-    public function __construct(TransactionsService $transactionService, \Customer $customer)
+    public function __construct(TransactionsService $transactionService, ContactsService $contactService, \Customer $customer, Permission $permission)
     {
         $this->transactionService = $transactionService;
+        $this->contactService = $contactService;
         $this->customer = $customer;
+        $this->permission = $permission;
     }
 
     /**
@@ -85,6 +92,12 @@ abstract class AbstractTransaction
             error_log('Transaction type ' . $this->getTypeName() . ' cannot be created.');
             return false;
         }
+
+        $contact = CustomerContactMapper::map($this->customer);
+        $contact->permission = $this->permission;
+
+        $this->contactService->createContact($contact, SynchronizationMode::$IGNORE);
+
         $maileonTransaction = new Transaction();
         $maileonTransaction->typeName = $this->getTypeName();
         $maileonTransaction->contact = CustomerContactMapper::mapToContactReference($this->customer);

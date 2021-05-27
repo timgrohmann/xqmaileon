@@ -2,13 +2,14 @@
 
 namespace PrestaShop\Module\XQMaileon\Configure;
 
-use de\xqueue\maileon\api\client\contacts\Permission;
 
 abstract class ConfigOptions
 {
     const XQMAILEON_API_KEY = 'XQMAILEON_API_KEY';
     const XQMAILEON_REG_CHECKOUT = 'XQMAILEON_REG_CHECKOUT';
     const XQMAILEON_PERMISSION_MODE = 'XQMAILEON_PERMISSION_MODE';
+    const XQMAILEON_PERMISSION_MODE_ORDER_CONF = 'XQMAILEON_PERMISSION_MODE_ORDER_CONF';
+    const XQMAILEON_PERMISSION_MODE_ABANDONED_CART = 'XQMAILEON_PERMISSION_MODE_ABANDONED_CART';
     const XQMAILEON_DOI_KEY = 'XQMAILEON_DOI_KEY';
     const XQMAILEON_SEND_DOI_WITH_MAILEON = 'XQMAILEON_SEND_DOI_WITH_MAILEON';
     const XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION = 'XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION';
@@ -27,7 +28,9 @@ abstract class ConfigOptions
         ConfigOptions::XQMAILEON_DOI_KEY => null,
         ConfigOptions::XQMAILEON_SEND_DOI_WITH_MAILEON => true,
         ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION => 1,
-        ConfigOptions::XQMAILEON_ABANDONED_TIME => '15'
+        ConfigOptions::XQMAILEON_ABANDONED_TIME => '15',
+        ConfigOptions::XQMAILEON_PERMISSION_MODE_ORDER_CONF => 1,
+        ConfigOptions::XQMAILEON_PERMISSION_MODE_ABANDONED_CART => 1
     ];
 
     public static function getOptionBool(string $key)

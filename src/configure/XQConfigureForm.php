@@ -78,6 +78,28 @@ class XQConfigureForm
                         ),
                     ),
                     array(
+                        'type' => 'select',
+                        'label' => $this->l('Permission for order confimation'),
+                        'name' => ConfigOptions::XQMAILEON_PERMISSION_MODE_ORDER_CONF,
+                        'desc' => $this->l('This permission will be set if a new maileon contact is created on order confimation.'),
+                        'options' => array(
+                            'query' => (new OptInPermissionMapper())->getPermissionOptions(),
+                            'id' => 'val',
+                            'name' => 'name'
+                        ),
+                    ),
+                    array(
+                        'type' => 'select',
+                        'label' => $this->l('Permission for abandoned cart'),
+                        'name' => ConfigOptions::XQMAILEON_PERMISSION_MODE_ABANDONED_CART,
+                        'desc' => $this->l('This permission will be set if a new maileon contact is created on an abandoned cart notification.'),
+                        'options' => array(
+                            'query' => (new OptInPermissionMapper())->getPermissionOptions(),
+                            'id' => 'val',
+                            'name' => 'name'
+                        ),
+                    ),
+                    array(
                         'type' => 'text',
                         'prefix' => '<i class="material-icons mi-input">mail</i>',
                         'name' => ConfigOptions::XQMAILEON_DOI_KEY,

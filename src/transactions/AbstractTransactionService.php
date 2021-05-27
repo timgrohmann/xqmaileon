@@ -2,6 +2,7 @@
 
 namespace PrestaShop\Module\XQMaileon\Transactions;
 
+use de\xqueue\maileon\api\client\contacts\ContactsService;
 use de\xqueue\maileon\api\client\transactions\TransactionsService;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 
@@ -9,6 +10,7 @@ abstract class AbstractTransactionService
 {
 
     protected TransactionsService $transactionService;
+    protected ContactsService $contactService;
 
     public function __construct()
     {
@@ -17,6 +19,7 @@ abstract class AbstractTransactionService
             'API_KEY' =>  \Configuration::get(ConfigOptions::XQMAILEON_API_KEY)
         );
         $this->transactionService = new TransactionsService($config);
+        $this->contactService = new ContactsService($config);
         # $this->transactionService->setDebug(true);
     }
 }

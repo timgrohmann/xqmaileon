@@ -27,7 +27,7 @@ class CustomerContactMapper
                 StandardContactField::$LASTNAME => $customer->lastname,
                 StandardContactField::$FULLNAME => $customer->firstname . ' ' . $customer->lastname,
                 # TODO: how to represent gender in Maileon
-                StandardContactField::$GENDER => $customer->id_gender,
+                StandardContactField::$GENDER => self::mapGender($customer->id_gender),
                 StandardContactField::$ORGANIZATION => $customer->company
             )
         );
@@ -67,5 +67,17 @@ class CustomerContactMapper
     {
         $goalPermission = (new OptInPermissionMapper())->getCurrentPermission();
         return $optin ? $goalPermission : Permission::$NONE;
+    }
+
+    public static function mapGender(int $genderId): string
+    {
+        switch ($genderId) {
+            case 1:
+                return 'm';
+            case 2:
+                return 'f';
+            default:
+                return '';
+        }
     }
 }
