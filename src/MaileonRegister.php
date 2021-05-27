@@ -3,7 +3,9 @@
 namespace PrestaShop\Module\XQMaileon;
 
 use Configuration;
+use de\xqueue\maileon\api\client\contacts\Contact;
 use de\xqueue\maileon\api\client\contacts\ContactsService;
+use de\xqueue\maileon\api\client\contacts\Permission;
 use de\xqueue\maileon\api\client\contacts\SynchronizationMode;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 use PrestaShop\Module\XQMaileon\Mapper\CustomerContactMapper;
@@ -44,7 +46,28 @@ class MaileonRegister
                 $this->permissionMapper->getCurrentHasDoubleOptInPlus(),
                 Configuration::get(ConfigOptions::XQMAILEON_DOI_KEY)
             );
+            return $result->isSuccess();
         } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    public function addEmail(string $mail): bool
+    {
+        $contact = new Contact(null, $mail, Permission::$SOI);
+        try {
+            $result = $this->contactsService->createContact(
+                $contact,
+                SynchronizationMode::$UPDATE,
+                "Prestashop Plugin Startseite",
+                null,
+                $this->permissionMapper->getCurrentHasDoubleOptIn(),
+                $this->permissionMapper->getCurrentHasDoubleOptInPlus(),
+                Configuration::get(ConfigOptions::XQMAILEON_DOI_KEY)
+            );
+            return $result->isSuccess();
+        } catch (\Throwable $th) {
+            return false;
         }
     }
 

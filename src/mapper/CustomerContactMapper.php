@@ -69,7 +69,7 @@ class CustomerContactMapper
         return $optin ? $goalPermission : Permission::$NONE;
     }
 
-    public static function mapGender(int $genderId): string
+    public static function mapGender($genderId): string
     {
         switch ($genderId) {
             case 1:

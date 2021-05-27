@@ -52,6 +52,10 @@ class Xqmaileon extends Module
      * @var XQConfigureForm
      */
     protected $config_form;
+
+    /**
+     * @var MaileonRegister
+     */
     protected $registerer;
 
     public static string $NEWSLETTER_FIELD = 'newsletter';
@@ -99,11 +103,13 @@ class Xqmaileon extends Module
 
         return parent::install() &&
             $this->registerHook('backOfficeHeader') &&
+            $this->registerHook('header') &&
             $this->registerHook('additionalCustomerFormFields') &&
             $this->registerHook('actionCustomerAccountAdd') &&
             $this->registerHook('actionCustomerAccountUpdate') &&
             $this->registerHook('actionObjectCustomerUpdateBefore') &&
             $this->registerHook('actionEmailSendBefore') &&
+            $this->registerHook('displayFooterBefore') &&
             AbandonedCartTransactionService::installDatabase();
     }
 
@@ -291,5 +297,57 @@ class Xqmaileon extends Module
             return !$service->sendConfirmation($order);
         }
         return true;
+    }
+
+    public function hookHeader($params)
+    {
+        $this->context->controller->addCSS($this->_path . 'views/css/front.css');
+    }
+
+    public function hookDisplayFooterBefore($params)
+    {
+
+        if ($this->context->customer->newsletter) return;
+
+        $this->context->smarty->assign([
+            'id_module' => $this->id,
+        ]);
+
+        $variables = [
+            'msg' => false,
+            'nw_error' => false,
+            'value' => ''
+        ];
+
+        if (Tools::isSubmit('submitNewsletter')) {
+            $email = Tools::getValue('email', '');
+            $customer = $this->context->customer;
+            $success = false;
+            if (!empty($customer) && $email == $customer->email) {
+                $success = $this->registerer->addContact($customer);
+                $customer->newsletter = true;
+                $customer->update();
+            } else {
+                $success = $this->registerer->addEmail(Tools::getValue('email'));
+            }
+
+            if ($success) {
+                $variables['msg'] = $this->l('Successfully registered new email:') . ' ' . Tools::getValue('email', '');
+                $variables['nw_error'] = false;
+            } else { /* @phpstan-ignore-line */
+                $variables['msg'] = $this->l('Newsletter signup failed. Try again later.');
+                $variables['nw_error'] = true;
+            }
+            $variables['value'] = $email;
+        }
+
+        $email = $this->context->customer->email;
+        if (!empty($email)) {
+            $variables['value'] = $email;
+        }
+
+        $this->smarty->assign($variables);
+
+        return $this->fetch('module:xqmaileon/views/templates/front/newsletter-signup.tpl');
     }
 }
