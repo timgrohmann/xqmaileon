@@ -16,7 +16,7 @@ jobs:
       with:
         php_version: 7.1
     - name: Prepare folder structure
-      run: mkdir xqmaileon && mv !(xqmaileon) xqmaileon
+      run: mkdir xqmaileon && shopt -s extglob && cp -r !(xqmaileon) xqmaileon/
     - name: Create ZIP archive
       run: zip -r xqmaileon.zip xqmaileon -x "*.git*" "*DOCKER_ENV" "*docker_tag" "*output.log"
     - name: Release
