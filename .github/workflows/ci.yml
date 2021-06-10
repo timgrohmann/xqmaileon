@@ -15,10 +15,12 @@ jobs:
       uses: php-actions/composer@v6
       with:
         php_version: 7.1
+    - name: Activate extglob
+      run: shopt -s extglob
     - name: Prepare folder structure
-      run: cp -r * xqmaileon/
+      run: mkdir xqmaileon && mv !(xqmaileon) xqmaileon
     - name: Create ZIP archive
-      run: zip -r xqmaileon.zip xqmaileon -x "*.git*" "*DOCKER_ENV" "*docker_tag" "*output.log"
+      run: zip -r xqmaileon xqmaileon -x "*.git*" "*DOCKER_ENV" "*docker_tag" "*output.log"
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
