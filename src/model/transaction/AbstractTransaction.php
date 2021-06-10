@@ -17,10 +17,25 @@ abstract class AbstractTransaction
     const TRANSACTION_PREFIX = 'prestashop_';
     const TRANSACTION_SUFFIX = '_1.0';
 
-    private TransactionsService $transactionService;
-    private ContactsService $contactService;
-    protected \Customer $customer;
-    private Permission $permission;
+    /**
+     * @var TransactionsService
+     */
+    private $transactionService;
+
+    /**
+     * @var ContactsService
+     */
+    private $contactService;
+
+    /**
+     * @var \Customer
+     */
+    protected $customer;
+
+    /**
+     * @var Permission
+     */
+    private $permission;
 
     public function __construct(TransactionsService $transactionService, ContactsService $contactService, \Customer $customer, Permission $permission)
     {

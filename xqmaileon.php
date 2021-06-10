@@ -58,8 +58,8 @@ class Xqmaileon extends Module
      */
     protected $registerer;
 
-    public static string $NEWSLETTER_FIELD = 'newsletter';
-    public static string $CONTACT_FORM_MARKER_FIELD = 'XQM_CONTACT_FORM_MARKER_FIELD';
+    public static $NEWSLETTER_FIELD = 'newsletter';
+    public static $CONTACT_FORM_MARKER_FIELD = 'XQM_CONTACT_FORM_MARKER_FIELD';
 
     public function __construct()
 

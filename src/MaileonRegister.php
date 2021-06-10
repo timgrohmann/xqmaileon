@@ -14,12 +14,25 @@ use PrestaShop\Module\XQMaileon\Mapper\OptInPermissionMapper;
 class MaileonRegister
 {
 
-    private string $api_key;
+    /**
+     * @var string
+     */
+    private $api_key;
 
-    private ContactsService $contactsService;
-    private OptInPermissionMapper $permissionMapper;
+    /**
+     * @var ContactsService
+     */
+    private $contactsService;
 
-    private string $BASE_URI = 'https://api.maileon.com/1.0';
+    /**
+     * @var OptInPermissionMapper
+     */
+    private $permissionMapper;
+
+    /**
+     * @var string
+     */
+    private $BASE_URI = 'https://api.maileon.com/1.0';
 
     public function __construct(string $api_key)
     {

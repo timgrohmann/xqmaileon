@@ -9,8 +9,15 @@ use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 abstract class AbstractTransactionService
 {
 
-    protected TransactionsService $transactionService;
-    protected ContactsService $contactService;
+    /**
+     * @var TransactionsService
+     */
+    protected $transactionService;
+
+    /**
+     * @var ContactsService
+     */
+    protected $contactService;
 
     public function __construct()
     {

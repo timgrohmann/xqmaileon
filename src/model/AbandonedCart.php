@@ -7,9 +7,20 @@ use DateTime;
 class AbandonedCart
 {
 
-    public int $id_cart;
-    public int $id_customer;
-    public DateTime $date_added;
+    /**
+     * @var int
+     */
+    public $id_cart;
+
+    /**
+     * @var int
+     */
+    public $id_customer;
+
+    /**
+     * @var DateTime
+     */
+    public $date_added;
 
     public function __construct($sqlResultArray)
     {
