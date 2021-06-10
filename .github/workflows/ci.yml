@@ -11,15 +11,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: xqmaileon
+    - name: Navigate into subdir
+      run: cd xqmaileon
     - name: Install dependencies using composer
       uses: php-actions/composer@v6
       with:
         php_version: 7.1
-    - name: Prepare folder structure
-      run: >-
-        shopt -s extglob
-        mkdir xqmaileon
-        mv !(xqmaileon) xqmaileon
+    - name: Navigate back up
+      run: cd ..
     - name: Create ZIP archive
       run: zip -r xqmaileon xqmaileon -x "*.git*" "*DOCKER_ENV" "*docker_tag" "*output.log"
     - name: Release
