@@ -27,5 +27,6 @@
     <h3><i class="material-icons mi-input">email</i> {l s='Maileon Integration' mod='xqmaileon'}</h3>
     <p>
         {l s='Use this module to connect Prestashop to Maileon.' mod='xqmaileon'}<br />
+        {l s='Please note: The integrated newsletter module should be deactivated to avoid duplications in the UI.' mod='xqmaileon'}<br />
     </p>
 </div>

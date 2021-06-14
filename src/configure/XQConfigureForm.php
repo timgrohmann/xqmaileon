@@ -146,6 +146,35 @@ class XQConfigureForm
                     ),
                     array(
                         'type' => 'switch',
+                        'label' => $this->l('Newsletter subscription in page footer'),
+                        'name' => ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER,
+                        'is_bool' => true,
+                        'desc' => $this->l('If there should be a registration form above the shops footer.'),
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'text',
+                        'name' => ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A,
+                        'label' => $this->l('Text to display above registration form.'),
+                    ),
+                    array(
+                        'type' => 'text',
+                        'name' => ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B,
+                        'label' => $this->l('Text to display below registration form.'),
+                    ),
+                    array(
+                        'type' => 'switch',
                         'label' => $this->l('Newsletter subscription during checkout'),
                         'name' => ConfigOptions::XQMAILEON_REG_CHECKOUT,
                         'is_bool' => true,

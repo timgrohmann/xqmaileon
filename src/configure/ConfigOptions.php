@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\XQMaileon\Configure;
 
-
 abstract class ConfigOptions
 {
     const XQMAILEON_API_KEY = 'XQMAILEON_API_KEY';
@@ -18,6 +17,9 @@ abstract class ConfigOptions
     const XQMAILEON_CRON_TOKEN = 'XQMAILEON_CRON_TOKEN';
     const XQMAILEON_WEBHOOK_TOKEN = 'XQMAILEON_WEBHOOK_TOKEN';
 
+    const XQMAILEON_NEWSLETTER_SIGNUP_FOOTER = 'XQMAILEON_NEWSLETTER_SIGNUP_FOOTER';
+    const XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A = 'XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A';
+    const XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B = 'XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B';
 
 
     # default values
@@ -30,7 +32,10 @@ abstract class ConfigOptions
         ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION => 1,
         ConfigOptions::XQMAILEON_ABANDONED_TIME => '15',
         ConfigOptions::XQMAILEON_PERMISSION_MODE_ORDER_CONF => 1,
-        ConfigOptions::XQMAILEON_PERMISSION_MODE_ABANDONED_CART => 1
+        ConfigOptions::XQMAILEON_PERMISSION_MODE_ABANDONED_CART => 1,
+        ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER => true,
+        ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A => '',
+        ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B => ''
     ];
 
     public static function getOptionBool(string $key)

@@ -207,7 +207,7 @@ class Xqmaileon extends Module
         $this->context->customer->{$field_name} = $this->context->customer->newsletter;
 
         $additionalFields = array();
-        if (Configuration::get('XQMAILEON_REG_CHECKOUT', false)) {
+        if (ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_REG_CHECKOUT)) {
             $additionalFields[] = (new FormField)
                 ->setName(Xqmaileon::$NEWSLETTER_FIELD)
                 ->setType('checkbox')
@@ -309,6 +309,8 @@ class Xqmaileon extends Module
 
         if ($this->context->customer->newsletter) return;
 
+        if (!ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER)) return;
+
         $this->context->smarty->assign([
             'id_module' => $this->id,
         ]);
@@ -316,6 +318,8 @@ class Xqmaileon extends Module
         $variables = [
             'msg' => false,
             'nw_error' => false,
+            'text_a' => \Configuration::get(ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A),
+            'text_b' => \Configuration::get(ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B),
             'value' => ''
         ];
 
