@@ -1,5 +1,6 @@
 <?php
 
+use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCart;
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartTransactionService;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +11,15 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
     {
         parent::initContent();
         header("Content-Type: application/json");
+
+        $token = Tools::getValue('token', false);
+        if ($token == false || $token != Configuration::get(ConfigOptions::XQMAILEON_WEBHOOK_TOKEN)) {
+            http_response_code(400);
+            echo json_encode([
+                'error' => 'Invalid Webhook Token'
+            ]);
+            exit;
+        }
 
         # request body sent by maileon is json, decode into array
         $requestBodyJson = json_decode(file_get_contents('php://input'), true);
