@@ -50,6 +50,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
     {
         $id = intval($body['external_id']);
         $customer = new \Customer($id);
+        if (empty($customer->email)) return 'No customer for given id.';
         $customer->optin = true;
         return $customer->update();
     }
@@ -58,6 +59,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
     {
         $id = intval($body['external_id']);
         $customer = new \Customer($id);
+        if (empty($customer->email)) return 'No customer for given id.';
         $customer->optin = false;
         $customer->newsletter = false;
         return $customer->update();
