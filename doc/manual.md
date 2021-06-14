@@ -81,8 +81,6 @@ Webhooks sind ein Feature von Maileon, das Ihnen erlaubt, durch Maileon ausgelö
 zurückzuspiegeln. Unter _Einstellungen > Konto > Webhooks_ können diese in Maileon konfiguriert werden.
 
 Geben Sie im Feld _HTTP-Post-URL_ die URL ein, die sie im Abschnitt "Webhooks einrichten" im Prestashop-Backoffice
-sehen. Verwenden Sie nur den Teil vor dem Fragezeichen.
+sehen. Verwenden Sie die gesamte URL inklusive der Parameter hinter dem Fragezeichen.
 
-Die Parameter hinter dem Fragezeichen können Sie mit _URL-Parameter hinzufügen_ anlegen,
-erforderlich sind `type` und `token`, die Werte entnehmen Sie ebenfalls der in Prestashop angezeigten URL.
 Zusätzlich müssen _JSON-Informationen integrieren_ und die Option _Externe ID anhängen_ ausgewählt sein.
