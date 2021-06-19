@@ -78,6 +78,25 @@ class XQConfigureForm
                         ),
                     ),
                     array(
+                        'type' => 'switch',
+                        'label' => $this->l('Send order confirmation mails from Maileon'),
+                        'name' => ConfigOptions::XQMAILEON_SEND_ORDER_CONF,
+                        'is_bool' => true,
+                        'desc' => $this->l('If order confirmation mails should be sent from Maileon or not.'),
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
                         'type' => 'select',
                         'label' => $this->l('Permission for order confimation'),
                         'name' => ConfigOptions::XQMAILEON_PERMISSION_MODE_ORDER_CONF,
@@ -216,6 +235,26 @@ class XQConfigureForm
                                 array(
                                     'id_option' => 60,
                                     'name' => $this->l('60 minutes')
+                                ),
+                                array(
+                                    'id_option' => 120,
+                                    'name' => $this->l('2 hours')
+                                ),
+                                array(
+                                    'id_option' => 240,
+                                    'name' => $this->l('4 hours')
+                                ),
+                                array(
+                                    'id_option' => 480,
+                                    'name' => $this->l('8 hours')
+                                ),
+                                array(
+                                    'id_option' => 720,
+                                    'name' => $this->l('12 hours')
+                                ),
+                                array(
+                                    'id_option' => 1440,
+                                    'name' => $this->l('1 day')
                                 ),
                                 array(
                                     'id_option' => null,

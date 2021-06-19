@@ -291,7 +291,7 @@ class Xqmaileon extends Module
     # do not send order confirmations from prestashop, use maileon instead
     public function hookActionEmailSendBefore($params)
     {
-        if ($params['template'] == 'order_conf') {
+        if ($params['template'] == 'order_conf' && ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_SEND_ORDER_CONF) ) {
             $order = new \Order($params['templateVars']['{id_order}']);
             $service = new OrderConfirmationTransactionService();
             return !$service->sendConfirmation($order);
