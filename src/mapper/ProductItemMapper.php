@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\XQMaileon\Mapper;
 
-
 class ProductItemMapper
 {
     public static function map(array $in): array

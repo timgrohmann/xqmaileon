@@ -50,7 +50,7 @@ abstract class AbstractTransaction
      * Takes the class name of the instanciated class and converts it to snake_case
      * to conform to Maileon's transaction type naming convention. Also adds prefix
      * and suffix.
-     * 
+     *
      * Example: AbandonedCartTransaction => prestashop_abandoned_cart_transaction_1.0
      *
      * @return string Formatted name
@@ -66,11 +66,11 @@ abstract class AbstractTransaction
     /**
      * @return array associative array of key => type. prepend key with '!' to make explicit
      */
-    protected abstract function getTypeDescription();
+    abstract protected function getTypeDescription();
 
     /**
      * Maps 'useful' type description to maileon description
-     * 
+     *
      * @return TransactionType
      */
     public function getTransactionType()

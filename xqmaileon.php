@@ -59,8 +59,6 @@ class Xqmaileon extends Module
     public static $CONTACT_FORM_MARKER_FIELD = 'XQM_CONTACT_FORM_MARKER_FIELD';
 
     public function __construct()
-
-
     {
         $this->name = 'xqmaileon';
         $this->tab = 'emailing';
@@ -112,7 +110,7 @@ class Xqmaileon extends Module
 
     public function uninstall()
     {
-        # foreach (ConfigOptions::all_options as $k => $v) Configuration::deleteByName($k);
+        # foreach (ConfigOptions::ALL_OPTIONS as $k => $v) Configuration::deleteByName($k);
 
         return parent::uninstall() &&
             AbandonedCartTransactionService::uninstallDatabase();
@@ -173,7 +171,7 @@ class Xqmaileon extends Module
      */
     protected function postProcess()
     {
-        $form_values = ConfigOptions::all_options;
+        $form_values = ConfigOptions::ALL_OPTIONS;
 
         foreach (array_keys($form_values) as $key) {
             Configuration::updateValue($key, Tools::getValue($key));
@@ -219,7 +217,6 @@ class Xqmaileon extends Module
          */
         $customer = $params['newCustomer'];
         if (ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_REG_CHECKOUT) && !empty(Tools::getValue(Xqmaileon::$NEWSLETTER_FIELD))) {
-
             # automatically set optin on customer when they have an account and it is configured
             if (Configuration::get(ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION) == 1 && !$customer->isGuest()) {
                 $customer->optin = true;
@@ -237,7 +234,9 @@ class Xqmaileon extends Module
         # return if not submitted from customer account from,
         # customer objects may be modified by other parties and not considered
         # for this plugin
-        if (!Tools::isSubmit(Xqmaileon::$CONTACT_FORM_MARKER_FIELD)) return;
+        if (!Tools::isSubmit(Xqmaileon::$CONTACT_FORM_MARKER_FIELD)) {
+            return;
+        }
 
         /**
          * The new value of the customer object that will be written in the update.
@@ -248,7 +247,9 @@ class Xqmaileon extends Module
         # retrieves stored state of customer from db
         $old = new Customer($customer->id);
 
-        if ($customer->isGuest()) return;
+        if ($customer->isGuest()) {
+            return;
+        }
 
         $new_newsletter_state = !empty(Tools::getValue(Xqmaileon::$NEWSLETTER_FIELD));
         $old_newsletter_state = !empty($old->newsletter);
@@ -282,7 +283,7 @@ class Xqmaileon extends Module
     # do not send order confirmations from prestashop, use maileon instead
     public function hookActionEmailSendBefore($params)
     {
-        if ($params['template'] == 'order_conf' && ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_SEND_ORDER_CONF) ) {
+        if ($params['template'] == 'order_conf' && ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_SEND_ORDER_CONF)) {
             $order = new \Order($params['templateVars']['{id_order}']);
             $service = new OrderConfirmationTransactionService();
             return !$service->sendConfirmation($order);
@@ -298,9 +299,13 @@ class Xqmaileon extends Module
     public function hookDisplayFooterBefore($params)
     {
 
-        if ($this->context->customer->newsletter) return;
+        if ($this->context->customer->newsletter) {
+            return;
+        }
 
-        if (!ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER)) return;
+        if (!ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER)) {
+            return;
+        }
 
         $this->context->smarty->assign([
             'id_module' => $this->id,

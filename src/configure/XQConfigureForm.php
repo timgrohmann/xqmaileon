@@ -279,7 +279,7 @@ class XQConfigureForm
      */
     protected function getConfigFormValues()
     {
-        $x = ConfigOptions::all_options;
+        $x = ConfigOptions::ALL_OPTIONS;
         array_walk($x, function (&$v, $k) {
             # get value from config or default from options if not set
             $v = \Configuration::get($k, null, null, null, $v);

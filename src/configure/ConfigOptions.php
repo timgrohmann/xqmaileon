@@ -24,7 +24,7 @@ abstract class ConfigOptions
 
 
     # default values
-    const all_options = [
+    const ALL_OPTIONS = [
         ConfigOptions::XQMAILEON_API_KEY => null,
         ConfigOptions::XQMAILEON_REG_CHECKOUT => true,
         ConfigOptions::XQMAILEON_PERMISSION_MODE => 4,

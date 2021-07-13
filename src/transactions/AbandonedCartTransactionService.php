@@ -15,7 +15,9 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
     public function trigger(): array
     {
         $timer = \Configuration::get(ConfigOptions::XQMAILEON_ABANDONED_TIME);
-        if (empty($timer) || empty((int) $timer)) return ['error' => 'Timer not set', 'timer' => $timer];
+        if (empty($timer) || empty((int) $timer)) {
+            return ['error' => 'Timer not set', 'timer' => $timer];
+        }
         $carts = $this->findAbandonedCarts((int) $timer);
         $successCount = 0;
         $failCount = 0;

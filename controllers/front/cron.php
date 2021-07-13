@@ -10,7 +10,7 @@ class XQMaileonCronModuleFrontController extends ModuleFrontController
     /**
      * @var CronTransactionServiceInterface[]
      */
-    const services = [
+    const SERVICES = [
         AbandonedCartTransactionService::class
     ];
 
@@ -29,7 +29,7 @@ class XQMaileonCronModuleFrontController extends ModuleFrontController
         }
 
         $ret = [];
-        foreach (self::services as $serviceClass) {
+        foreach (self::SERVICES as $serviceClass) {
             $service  = new $serviceClass();
             $result = $service->trigger();
             # sets result value to return array on service class name as key
