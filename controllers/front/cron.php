@@ -21,6 +21,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ *
+ *  @author    XQueue GmbH
+ *  @copyright 2013-2021 XQueue
+ *  @license   MIT
  */
 
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
