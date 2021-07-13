@@ -67,7 +67,8 @@ class Xqmaileon extends Module
         $this->version = '1.0.0';
         $this->author = 'XQueue';
         $this->need_instance = 0;
-
+        $this->module_key = '0cffcddc4ae84209f6f434194d3aeb0c';
+        
         /**
          * Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
          */
