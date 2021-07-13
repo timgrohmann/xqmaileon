@@ -19,7 +19,7 @@ class XQConfigureForm
     /**
      * Create the form that will be displayed in the configuration of your module.
      */
-    function renderForm()
+    public function renderForm()
     {
         $context = \Context::getContext();
         $helper = new \HelperForm();
