@@ -27,6 +27,8 @@
 
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 
+use de\xqueue\maileon\api\client\MaileonAPIException;
+use de\xqueue\maileon\api\client\utils\PingService;
 use PrestaShop\Module\XQMaileon\MaileonRegister;
 use PrestaShop\Module\XQMaileon\Configure\XQConfigureForm;
 
@@ -35,9 +37,6 @@ use PrestaShop\PrestaShop\Adapter\Entity\Module;
 use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 use PrestaShop\PrestaShop\Adapter\Entity\Customer;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Message\ResponseInterface;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartTransactionService;
 use PrestaShop\Module\XQMaileon\Transactions\OrderConfirmationTransactionService;
@@ -139,23 +138,17 @@ class Xqmaileon extends Module
 
         $output .= $this->config_form->renderForm();
 
-        $client = new Client();
-
         $api_success = false;
-
-        $key = Configuration::get('XQMAILEON_API_KEY');
+        $key = \Configuration::get(ConfigOptions::XQMAILEON_API_KEY);
 
         try {
-            /**
-             * @var ResponseInterface
-             */
-            $res = $client->get("https://api.maileon.com/1.0/ping", array(
-                'headers' => array(
-                    'Authorization' => 'Basic ' . base64_encode($key)
-                )
-            ));
-            $api_success = $res->getStatusCode() == 200;
-        } catch (RequestException $e) {
+            $config = array(
+                'BASE_URI' => 'https://api.maileon.com/1.0',
+                'API_KEY' =>  $key
+            );
+            $pingService = new PingService($config);
+            $api_success = $pingService->pingGet()->getStatusCode() == 200;
+        } catch (MaileonAPIException $e) {
         }
 
 
