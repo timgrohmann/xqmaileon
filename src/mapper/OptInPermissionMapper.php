@@ -2,7 +2,6 @@
 
 namespace PrestaShop\Module\XQMaileon\Mapper;
 
-use Configuration;
 use de\xqueue\maileon\api\client\contacts\Permission;
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 
@@ -50,7 +49,7 @@ class OptInPermissionMapper
     public function getCurrentPermission()
     {
         $code = \Configuration::get(ConfigOptions::XQMAILEON_PERMISSION_MODE);
-        return Permission::getPermission($code);
+        return $this->getPermission($code);
     }
 
     /**
@@ -59,7 +58,7 @@ class OptInPermissionMapper
     public function getAbandonedCartNewPermission()
     {
         $code = \Configuration::get(ConfigOptions::XQMAILEON_PERMISSION_MODE_ABANDONED_CART);
-        return Permission::getPermission($code);
+        return $this->getPermission($code);
     }
 
     /**
@@ -68,7 +67,7 @@ class OptInPermissionMapper
     public function getOrderConfNewPermission()
     {
         $code = \Configuration::get(ConfigOptions::XQMAILEON_PERMISSION_MODE_ORDER_CONF);
-        return Permission::getPermission($code);
+        return $this->getPermission($code);
     }
 
     public function getCurrentHasDoubleOptIn()
@@ -79,5 +78,38 @@ class OptInPermissionMapper
     public function getCurrentHasDoubleOptInPlus()
     {
         return $this->getCurrentPermission()->getCode() == Permission::$DOI_PLUS->getCode();
+    }
+
+    public function getPermission($code)
+    {
+        switch ($code) {
+            case 1:
+                return Permission::$NONE;
+            case "none":
+                return Permission::$NONE;
+            case 2:
+                return Permission::$SOI;
+            case "soi":
+                return Permission::$SOI;
+            case 3:
+                return Permission::$COI;
+            case "coi":
+                return Permission::$COI;
+            case 4:
+                return Permission::$DOI;
+            case "doi":
+                return Permission::$DOI;
+            case 5:
+                return Permission::$DOI_PLUS;
+            case "doi+":
+                return Permission::$DOI_PLUS;
+            case 6:
+                return Permission::$OTHER;
+            case "other":
+                return Permission::$OTHER;
+
+            default:
+                return Permission::$OTHER;
+        }
     }
 }
