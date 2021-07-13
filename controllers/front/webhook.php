@@ -59,7 +59,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
 
     public function handleDoiConfirm($body)
     {
-        $id = intval($body['external_id']);
+        $id = (int) $body['external_id'];
         $customer = new \Customer($id);
         if (empty($customer->email)) return 'No customer for given id.';
         $customer->optin = true;
@@ -68,7 +68,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
 
     public function handleUnsubscribe($body)
     {
-        $id = intval($body['external_id']);
+        $id = (int) $body['external_id'];
         $customer = new \Customer($id);
         if (empty($customer->email)) return 'No customer for given id.';
         $customer->optin = false;

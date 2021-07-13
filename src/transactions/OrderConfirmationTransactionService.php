@@ -26,7 +26,7 @@ class OrderConfirmationTransactionService extends AbstractTransactionService
                 'status' => 'created',
                 'estimated_delivery_date' => $order->delivery_date,
                 'items' => ProductItemMapper::mapArray($order->getCartProducts()),
-                'total' => floatval($order->total_paid),
+                'total' => (float) $order->total_paid,
                 'total_no_shipping' => $order->total_paid - $order->total_shipping,
                 'total_tax' => $order->total_paid - $order->total_paid_tax_excl,
                 'total_fees' => $order->total_shipping + $order->total_wrapping,

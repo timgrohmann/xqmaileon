@@ -24,8 +24,8 @@ class AbandonedCart
 
     public function __construct($sqlResultArray)
     {
-        $this->id_cart = intval($sqlResultArray['id_cart']);
-        $this->id_customer = intval($sqlResultArray['id_customer']);
+        $this->id_cart = (int) $sqlResultArray['id_cart'];
+        $this->id_customer = (int) $sqlResultArray['id_customer'];
         $this->date_added = DateTime::createFromFormat('Y-d-m H:i:s', $sqlResultArray['date_add']);
     }
 }

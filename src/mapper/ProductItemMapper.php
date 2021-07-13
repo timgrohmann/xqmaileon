@@ -21,7 +21,7 @@ class ProductItemMapper
             'release_date' => $product->date_add,
             'url' => $context->link->getProductLink($product),
             'image_url' => $img_url,
-            'quantity' => intval($in['cart_quantity']),
+            'quantity' => (int) $in['cart_quantity'],
             'single_price' => doubleval($in['unit_price_tax_incl']),
             'total' => doubleval($in['total_price_tax_incl'])
         ];
