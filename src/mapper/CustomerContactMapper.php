@@ -6,7 +6,6 @@ use de\xqueue\maileon\api\client\contacts\Contact;
 use de\xqueue\maileon\api\client\contacts\Permission;
 use de\xqueue\maileon\api\client\contacts\StandardContactField;
 use de\xqueue\maileon\api\client\transactions\ContactReference;
-use PrestaShop\PrestaShop\Adapter\Entity\Context;
 
 class CustomerContactMapper
 {

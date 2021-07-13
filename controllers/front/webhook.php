@@ -1,7 +1,6 @@
 <?php
 
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
-use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCart;
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartTransactionService;

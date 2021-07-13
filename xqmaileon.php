@@ -32,7 +32,6 @@ use de\xqueue\maileon\api\client\utils\PingService;
 use PrestaShop\Module\XQMaileon\MaileonRegister;
 use PrestaShop\Module\XQMaileon\Configure\XQConfigureForm;
 
-use PrestaShop\PrestaShop\Adapter\Entity\Configuration;
 use PrestaShop\PrestaShop\Adapter\Entity\Module;
 use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 use PrestaShop\PrestaShop\Adapter\Entity\Customer;
