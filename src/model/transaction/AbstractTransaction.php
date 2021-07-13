@@ -59,7 +59,7 @@ abstract class AbstractTransaction
     {
         $fqn = explode('\\', get_class($this));
         $name = array_pop($fqn);
-        $underscored = Tools::strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $name));
+        $underscored = \Tools::strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $name));
         return self::TRANSACTION_PREFIX . $underscored . self::TRANSACTION_SUFFIX;
     }
 
@@ -80,8 +80,8 @@ abstract class AbstractTransaction
         $transactionType = new TransactionType(null, $this->getTypeName());
         foreach ($desc as $name => $type) {
             $required = false;
-            if (Tools::substr($name, -1) == '!') {
-                $name = Tools::substr($name, 0, -1);
+            if (\Tools::substr($name, -1) == '!') {
+                $name = \Tools::substr($name, 0, -1);
                 $required = true;
             }
             $transactionType->attributes[] =
