@@ -25,7 +25,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 use PrestaShop\Module\XQMaileon\MaileonRegister;
 use PrestaShop\Module\XQMaileon\Configure\XQConfigureForm;

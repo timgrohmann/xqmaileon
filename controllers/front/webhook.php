@@ -1,6 +1,8 @@
 <?php
 
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
+use PrestaShop\PrestaShop\Adapter\Entity\Tools;
+
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCart;
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartTransactionService;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +24,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
         }
 
         # request body sent by maileon is json, decode into array
-        $requestBodyJson = json_decode(file_get_contents('php://input'), true);
+        $requestBodyJson = json_decode(Tools::file_get_contents('php://input'), true);
 
         $webhookResult = $this->handleWebhook($requestBodyJson);
         if ($webhookResult === false) {
@@ -44,7 +46,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
      */
     public function handleWebhook($body)
     {
-        $type = $_GET['type'];
+        $type = Tools::getValue('type');
 
         switch ($type) {
             case 'doi':
