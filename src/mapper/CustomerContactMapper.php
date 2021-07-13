@@ -33,7 +33,7 @@ class CustomerContactMapper
 
         # handle address
 
-        $addresses = $customer->getAddresses(Context::getContext()->language->id);
+        $addresses = $customer->getAddresses(\Context::getContext()->language->id);
 
         if (count($addresses) >= 1) {
             $address = $addresses[0];

@@ -10,7 +10,6 @@ use de\xqueue\maileon\api\client\transactions\Transaction;
 use de\xqueue\maileon\api\client\transactions\TransactionsService;
 use de\xqueue\maileon\api\client\transactions\TransactionType;
 
-use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 use PrestaShop\Module\XQMaileon\Mapper\CustomerContactMapper;
 
 abstract class AbstractTransaction
