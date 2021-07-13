@@ -1,1 +1,1 @@
-{$myarray|@json_encode | escape:'htmlall':'UTF-8' nofilter}
+{$myarray|@json_encode|escape:'htmlall':'UTF-8' nofilter}

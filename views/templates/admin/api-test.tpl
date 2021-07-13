@@ -57,7 +57,7 @@
         {l s='Add a cron job to your system/server that calls the following URL, to enable abandoned cart notififcations.' mod='xqmaileon'}
     </p>
     <p class="center">
-        {$cron_token | escape:'htmlall':'UTF-8' }
+        {$cron_token|escape:'htmlall':'UTF-8' }
     </p>
 </div>
 
@@ -73,11 +73,11 @@
         </tr>
         <tr>
             <td>{l s='DOI Confirmation' mod='xqmaileon'}</td>
-            <td>{$webhook_doi_confirm | escape:'htmlall':'UTF-8'}</td>
+            <td>{$webhook_doi_confirm|escape:'htmlall':'UTF-8'}</td>
         </tr>
         <tr>
             <td>{l s='Unsubscription' mod='xqmaileon'}</td>
-            <td>{$webhook_unsubscribe | escape:'htmlall':'UTF-8'}</td>
+            <td>{$webhook_unsubscribe|escape:'htmlall':'UTF-8'}</td>
         </tr>
     </table>
 </div>
