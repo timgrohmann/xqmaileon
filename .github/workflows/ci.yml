@@ -18,6 +18,15 @@ jobs:
       with:
         php_version: 7.1
         working_dir: xqmaileon
+    - name: Copy index.php to all of /vendor/
+      run: >
+        for i in ./vendor/* # iterate over all files in vendor dir
+        do
+            if [ -d "$i" ]
+            then
+                cp index.php "$i"
+            fi
+        done
     - name: Create ZIP archive
       run: zip -r xqmaileon xqmaileon -x "*.git*" "*DOCKER_ENV" "*docker_tag" "*output.log"
     - name: Release
