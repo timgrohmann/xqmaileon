@@ -135,6 +135,9 @@ class Xqmaileon extends Module
 
         $output = $this->context->smarty->fetch($this->local_path . 'views/templates/admin/configure.tpl');
 
+        if (Tools::isSubmit('submitXqmaileonModule')) {
+            $output .= $this->displayConfirmation($this->trans('The settings have been updated.', [], 'Admin.Notifications.Success'));
+        }
         $output .= $this->config_form->renderForm();
 
         $api_success = false;
