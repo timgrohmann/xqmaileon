@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The MIT License (MIT)
  *
@@ -32,6 +33,7 @@ namespace PrestaShop\Module\XQMaileon\Transactions;
 use PrestaShop\Module\XQMaileon\Mapper\AddressMapper;
 use PrestaShop\Module\XQMaileon\Mapper\OptInPermissionMapper;
 use PrestaShop\Module\XQMaileon\Mapper\ProductItemMapper;
+use PrestaShop\Module\XQMaileon\Mapper\ValidDateMapper;
 use PrestaShop\Module\XQMaileon\Model\Transaction\OrderConfirmationTransaction;
 
 class OrderConfirmationTransactionService extends AbstractTransactionService
@@ -49,9 +51,9 @@ class OrderConfirmationTransactionService extends AbstractTransactionService
         $content = [
             'order' => [
                 'id' => $order->reference,
-                'date' => $order->date_add,
+                'date' => ValidDateMapper::validDateOrNull($order->date_add),
                 'status' => 'created',
-                'estimated_delivery_date' => $order->delivery_date,
+                'estimated_delivery_date' => ValidDateMapper::validDateOrNull($order->delivery_date),
                 'items' => ProductItemMapper::mapArray($order->getCartProducts()),
                 'total' => (float) $order->total_paid,
                 'total_no_shipping' => $order->total_paid - $order->total_shipping,
@@ -68,7 +70,7 @@ class OrderConfirmationTransactionService extends AbstractTransactionService
                     'id' => $order->module,
                     'name' => $order->payment
                 ],
-                'due_date' => $order->invoice_date
+                'due_date' => ValidDateMapper::validDateOrNull($order->invoice_date)
             ],
             'billing.address' => AddressMapper::mapToArray($invoiceAdress),
             'shipping.address' => AddressMapper::mapToArray($deliveryAddress),
