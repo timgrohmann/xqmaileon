@@ -65,7 +65,7 @@ class Xqmaileon extends Module
     {
         $this->name = 'xqmaileon';
         $this->tab = 'emailing';
-        $this->version = '1.3.1';
+        $this->version = '1.3.2';
         $this->author = 'XQueue';
         $this->need_instance = 0;
         $this->module_key = '0cffcddc4ae84209f6f434194d3aeb0c';
