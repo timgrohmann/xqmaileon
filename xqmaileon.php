@@ -3,7 +3,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2013-2021 XQueue GmbH
+ * Copyright (c) 2013-2022 XQueue GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  *
  *  @author    XQueue GmbH
- *  @copyright 2013-2021 XQueue
+ *  @copyright 2013-2022 XQueue
  *  @license   MIT
  */
 
@@ -65,7 +65,7 @@ class Xqmaileon extends Module
     {
         $this->name = 'xqmaileon';
         $this->tab = 'emailing';
-        $this->version = '1.3.2';
+        $this->version = '1.3.3';
         $this->author = 'XQueue';
         $this->need_instance = 0;
         $this->module_key = '0cffcddc4ae84209f6f434194d3aeb0c';
