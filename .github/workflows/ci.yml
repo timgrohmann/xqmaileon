@@ -16,6 +16,7 @@ jobs:
     - name: Install dependencies using composer
       uses: php-actions/composer@v6
       with:
+        dev: no
         php_version: 7.4
         working_dir: xqmaileon
     - name: Copy index.php to all of /vendor/
