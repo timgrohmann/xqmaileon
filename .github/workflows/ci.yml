@@ -19,7 +19,7 @@ jobs:
         php_version: 7.4
         working_dir: xqmaileon
     - name: Copy index.php to all of /vendor/
-      run: find xqmaileon/vendor -type d -exec sudo cp xqmaileon/index.php {} \;
+      run: find xqmaileon -type d -exec sudo cp xqmaileon/index.php {} \;
     - name: Remove .DS_Store
       run: sudo find . -name ".DS_Store" -delete
     - name: Create ZIP archive
