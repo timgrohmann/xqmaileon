@@ -41,23 +41,23 @@ class OptInPermissionMapper
         $this->permission_options = [
             [
                 'name' => 'None',
-                'xq_val' => Permission::$NONE
+                'xq_val' => Permission::$NONE,
             ],
             [
                 'name' => 'Single Opt-In',
-                'xq_val' => Permission::$SOI
+                'xq_val' => Permission::$SOI,
             ],
             [
                 'name' => 'Confirmed Opt-In',
-                'xq_val' => Permission::$COI
+                'xq_val' => Permission::$COI,
             ],
             [
                 'name' => 'Double Opt-In',
-                'xq_val' => Permission::$DOI
+                'xq_val' => Permission::$DOI,
             ],
             [
                 'name' => 'Double Opt-In+',
-                'xq_val' => Permission::$DOI_PLUS
+                'xq_val' => Permission::$DOI_PLUS,
             ],
         ];
     }
@@ -65,7 +65,8 @@ class OptInPermissionMapper
     public function getPermissionOptions()
     {
         return array_map(function ($x) {
-            $x["val"] = $x["xq_val"]->getCode();
+            $x['val'] = $x['xq_val']->getCode();
+
             return $x;
         }, $this->permission_options);
     }
@@ -76,6 +77,7 @@ class OptInPermissionMapper
     public function getCurrentPermission()
     {
         $code = \Configuration::get(ConfigOptions::XQMAILEON_PERMISSION_MODE);
+
         return $this->getPermission($code);
     }
 
@@ -85,6 +87,7 @@ class OptInPermissionMapper
     public function getAbandonedCartNewPermission()
     {
         $code = \Configuration::get(ConfigOptions::XQMAILEON_PERMISSION_MODE_ABANDONED_CART);
+
         return $this->getPermission($code);
     }
 
@@ -94,6 +97,7 @@ class OptInPermissionMapper
     public function getOrderConfNewPermission()
     {
         $code = \Configuration::get(ConfigOptions::XQMAILEON_PERMISSION_MODE_ORDER_CONF);
+
         return $this->getPermission($code);
     }
 
@@ -112,27 +116,27 @@ class OptInPermissionMapper
         switch ($code) {
             case 1:
                 return Permission::$NONE;
-            case "none":
+            case 'none':
                 return Permission::$NONE;
             case 2:
                 return Permission::$SOI;
-            case "soi":
+            case 'soi':
                 return Permission::$SOI;
             case 3:
                 return Permission::$COI;
-            case "coi":
+            case 'coi':
                 return Permission::$COI;
             case 4:
                 return Permission::$DOI;
-            case "doi":
+            case 'doi':
                 return Permission::$DOI;
             case 5:
                 return Permission::$DOI_PLUS;
-            case "doi+":
+            case 'doi+':
                 return Permission::$DOI_PLUS;
             case 6:
                 return Permission::$OTHER;
-            case "other":
+            case 'other':
                 return Permission::$OTHER;
 
             default:

@@ -33,7 +33,6 @@ use de\xqueue\maileon\api\client\transactions\DataType;
 
 class AbandonedCartTransaction extends AbstractTransaction
 {
-
     public function getTypeDescription()
     {
         return [
@@ -93,7 +92,7 @@ class AbandonedCartTransaction extends AbstractTransaction
             'generic.timestamp_3' => DataType::$TIMESTAMP,
             'generic.json_1' => DataType::$JSON,
             'generic.json_2' => DataType::$JSON,
-            'generic.json_3' => DataType::$JSON
+            'generic.json_3' => DataType::$JSON,
         ];
     }
 }

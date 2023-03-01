@@ -36,7 +36,6 @@ use PrestaShop\Module\XQMaileon\Model\Transaction\AbandonedCartTransaction;
 
 class AbandonedCartTransactionService extends AbstractTransactionService implements CronTransactionServiceInterface
 {
-
     const ABANDONED_CART_NOTIFIED_TABLE_NAME = 'xqm_abandoned_cart_notified';
 
     public function trigger(): array
@@ -51,16 +50,17 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
         foreach ($carts as $cart) {
             $res = $this->notifyOneCart($cart);
             if ($res) {
-                $successCount++;
+                ++$successCount;
                 $this->setCartNotified($cart);
             } else {
-                $failCount++;
+                ++$failCount;
             }
         }
+
         return [
             'succeeded' => $successCount,
             'failed' => $failCount,
-            'timer' => $timer
+            'timer' => $timer,
         ];
     }
 
@@ -72,12 +72,14 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
             date_notified DATETIME DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id_notification)
         ) DEFAULT CHARSET=utf8';
+
         return \Db::getInstance()->execute($sql);
     }
 
     public static function uninstallDatabase(): bool
     {
         $sql = 'DROP TABLE IF EXISTS ' . _DB_PREFIX_ . self::ABANDONED_CART_NOTIFIED_TABLE_NAME;
+
         return \Db::getInstance()->execute($sql);
     }
 
@@ -86,9 +88,9 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
      */
     private function findAbandonedCarts(int $timer)
     {
-        # selects newest cart the customer created but not ordered
-        # also does not select cart if customer ordered another card afterwars
-        # does not select carts where a notification has already been sent and logged to ABANDONED_CART_NOTIFIED_TABLE_NAME table
+        // selects newest cart the customer created but not ordered
+        // also does not select cart if customer ordered another card afterwars
+        // does not select carts where a notification has already been sent and logged to ABANDONED_CART_NOTIFIED_TABLE_NAME table
         $sql = '
         WITH ranked_carts AS (
             SELECT c.*, ROW_NUMBER() OVER (PARTITION BY id_customer ORDER BY date_add DESC) AS rn
@@ -111,10 +113,11 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
 
         $db = \Db::getInstance();
         $carts = $db->query($sql);
-        $all_carts = array();
+        $all_carts = [];
         while ($fetch = $db->nextRow($carts)) {
             $all_carts[] = new AbandonedCart($fetch);
         }
+
         return $all_carts;
     }
 
@@ -125,18 +128,19 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
     {
         $customerForCart = new \Customer($abandonedCart->id_customer);
 
-        # do not process cart if customer does not exist (anymore)
+        // do not process cart if customer does not exist (anymore)
         if (empty($customerForCart->email)) {
             return false;
         }
 
-        # only send abandoned cart notification if customer has opted in to emails or
-        # double opt in was not configured in module settings
+        // only send abandoned cart notification if customer has opted in to emails or
+        // double opt in was not configured in module settings
 
         if ($customerForCart->optin || !(new OptInPermissionMapper())->getCurrentHasDoubleOptIn()) {
             $cart = new \Cart($abandonedCart->id_cart);
             $cartSummary = $cart->getRawSummaryDetails(\Context::getContext()->language->id);
             $trans = new AbandonedCartTransaction($this->transactionService, $this->contactService, $customerForCart, (new OptInPermissionMapper())->getAbandonedCartNewPermission());
+
             return $trans->send(
                 [
                     'cart' => [
@@ -149,32 +153,33 @@ class AbandonedCartTransactionService extends AbstractTransactionService impleme
                         'total_fees' => $cartSummary['total_wrapping'] + $cartSummary['total_shipping'],
                         'fees' => [
                             'shipping' => $cartSummary['total_shipping'],
-                            'wrapping' => $cartSummary['total_wrapping']
+                            'wrapping' => $cartSummary['total_wrapping'],
                         ],
                         'currency' => (new \Currency($cart->id_currency))->symbol,
                     ],
                     'discount' => [
                         'total' => (string) $cartSummary['total_discounts'],
-                        'rules' => $cartSummary['discounts']
+                        'rules' => $cartSummary['discounts'],
                     ],
                     'customer' => [
                         'fullname' => $customerForCart->firstname . ' ' . $customerForCart->lastname,
                         'firstname' => $customerForCart->firstname,
                         'lastname' => $customerForCart->lastname,
                         'id' => (string) $customerForCart->id,
-                    ]
+                    ],
                 ]
             );
         } else {
             trigger_error('Cannot send transaction to customer without opt-in.');
         }
+
         return false;
     }
 
     private function setCartNotified(AbandonedCart $abandonedCart)
     {
         \Db::getInstance()->insert(self::ABANDONED_CART_NOTIFIED_TABLE_NAME, [
-            'id_cart' => $abandonedCart->id_cart
+            'id_cart' => $abandonedCart->id_cart,
         ]);
     }
 }

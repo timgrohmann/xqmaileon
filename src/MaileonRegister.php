@@ -29,7 +29,6 @@
 
 namespace PrestaShop\Module\XQMaileon;
 
-use Configuration;
 use de\xqueue\maileon\api\client\contacts\Contact;
 use de\xqueue\maileon\api\client\contacts\ContactsService;
 use de\xqueue\maileon\api\client\contacts\Permission;
@@ -40,7 +39,6 @@ use PrestaShop\Module\XQMaileon\Mapper\OptInPermissionMapper;
 
 class MaileonRegister
 {
-
     /**
      * @var string
      */
@@ -65,10 +63,10 @@ class MaileonRegister
     {
         $this->api_key = $api_key;
 
-        $config = array(
+        $config = [
             'BASE_URI' => 'https://api.maileon.com/1.0',
-            'API_KEY' =>  \Configuration::get(ConfigOptions::XQMAILEON_API_KEY)
-        );
+            'API_KEY' => \Configuration::get(ConfigOptions::XQMAILEON_API_KEY),
+        ];
         $this->contactsService = new ContactsService($config);
         $this->permissionMapper = new OptInPermissionMapper();
     }
@@ -80,12 +78,13 @@ class MaileonRegister
             $result = $this->contactsService->createContact(
                 $contact,
                 SynchronizationMode::$UPDATE,
-                "Prestashop Plugin",
+                'Prestashop Plugin',
                 null,
                 $this->permissionMapper->getCurrentHasDoubleOptIn(),
                 $this->permissionMapper->getCurrentHasDoubleOptInPlus(),
-                Configuration::get(ConfigOptions::XQMAILEON_DOI_KEY)
+                \Configuration::get(ConfigOptions::XQMAILEON_DOI_KEY)
             );
+
             return $result->isSuccess();
         } catch (\Throwable $th) {
             return false;
@@ -99,18 +98,18 @@ class MaileonRegister
             $result = $this->contactsService->createContact(
                 $contact,
                 SynchronizationMode::$UPDATE,
-                "Prestashop Plugin Startseite",
+                'Prestashop Plugin Startseite',
                 null,
                 $this->permissionMapper->getCurrentHasDoubleOptIn(),
                 $this->permissionMapper->getCurrentHasDoubleOptInPlus(),
-                Configuration::get(ConfigOptions::XQMAILEON_DOI_KEY)
+                \Configuration::get(ConfigOptions::XQMAILEON_DOI_KEY)
             );
+
             return $result->isSuccess();
         } catch (\Throwable $th) {
             return false;
         }
     }
-
 
     public function updateCustomerEmail(\Customer $customer, string $oldMail)
     {

@@ -29,40 +29,35 @@
 
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 
-use PrestaShop\Module\XQMaileon\Transactions\AbandonedCart;
-use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartTransactionService;
-use Symfony\Component\HttpFoundation\Response;
-
 class XQMaileonWebhookModuleFrontController extends ModuleFrontController
 {
     public function initContent()
     {
         parent::initContent();
-        header("Content-Type: application/json");
+        header('Content-Type: application/json');
 
         $token = Tools::getValue('token', false);
         if ($token == false || $token != Configuration::get(ConfigOptions::XQMAILEON_WEBHOOK_TOKEN)) {
             http_response_code(400);
             echo json_encode([
-                'error' => 'Invalid Webhook Token'
+                'error' => 'Invalid Webhook Token',
             ]);
             exit;
         }
 
-        # request body sent by maileon is json, decode into array
+        // request body sent by maileon is json, decode into array
         $requestBodyJson = json_decode(Tools::file_get_contents('php://input'), true);
 
         $webhookResult = $this->handleWebhook($requestBodyJson);
         if ($webhookResult === false) {
             http_response_code(400);
             echo json_encode([
-                'error' => 'Webhook failed. Did you specify a type?'
+                'error' => 'Webhook failed. Did you specify a type?',
             ]);
             exit;
         }
 
-
-        # return webhook result which can be utilized for logging/debugging
+        // return webhook result which can be utilized for logging/debugging
         echo json_encode($webhookResult);
         exit;
     }
@@ -92,6 +87,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
             return 'No customer for given id.';
         }
         $customer->optin = true;
+
         return $customer->update();
     }
 
@@ -104,6 +100,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
         }
         $customer->optin = false;
         $customer->newsletter = false;
+
         return $customer->update();
     }
 }

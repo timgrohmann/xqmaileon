@@ -49,8 +49,7 @@ abstract class ConfigOptions
     const XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A = 'XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A';
     const XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B = 'XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B';
 
-
-    # default values
+    // default values
     const ALL_OPTIONS = [
         ConfigOptions::XQMAILEON_API_KEY => null,
         ConfigOptions::XQMAILEON_REG_CHECKOUT => true,
@@ -64,7 +63,7 @@ abstract class ConfigOptions
         ConfigOptions::XQMAILEON_PERMISSION_MODE_ABANDONED_CART => 1,
         ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER => true,
         ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A => '',
-        ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B => ''
+        ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B => '',
     ];
 
     public static function getOptionBool(string $key)

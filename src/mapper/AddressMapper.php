@@ -31,7 +31,6 @@ namespace PrestaShop\Module\XQMaileon\Mapper;
 
 class AddressMapper
 {
-
     public static function mapToArray(\Address $address)
     {
         return [

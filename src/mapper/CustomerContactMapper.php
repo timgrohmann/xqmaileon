@@ -36,7 +36,6 @@ use de\xqueue\maileon\api\client\transactions\ContactReference;
 
 class CustomerContactMapper
 {
-
     /**
      * @return Contact
      */
@@ -48,17 +47,17 @@ class CustomerContactMapper
             CustomerContactMapper::mapPermission(!empty($customer->optin)),
             $customer->id,
             false,
-            array(
+            [
                 StandardContactField::$FIRSTNAME => $customer->firstname,
                 StandardContactField::$LASTNAME => $customer->lastname,
                 StandardContactField::$FULLNAME => $customer->firstname . ' ' . $customer->lastname,
-                # TODO: how to represent gender in Maileon
+                // TODO: how to represent gender in Maileon
                 StandardContactField::$GENDER => self::mapGender($customer->id_gender),
-                StandardContactField::$ORGANIZATION => $customer->company
-            )
+                StandardContactField::$ORGANIZATION => $customer->company,
+            ]
         );
 
-        # handle address
+        // handle address
 
         $addresses = $customer->getAddresses(\Context::getContext()->language->id);
 
@@ -92,6 +91,7 @@ class CustomerContactMapper
     public static function mapPermission(bool $optin)
     {
         $goalPermission = (new OptInPermissionMapper())->getCurrentPermission();
+
         return $optin ? $goalPermission : Permission::$NONE;
     }
 

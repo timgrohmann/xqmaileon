@@ -38,7 +38,6 @@ use PrestaShop\Module\XQMaileon\Model\Transaction\OrderConfirmationTransaction;
 
 class OrderConfirmationTransactionService extends AbstractTransactionService
 {
-
     public function sendConfirmation(\Order $order): bool
     {
         $customer = new \Customer($order->id_customer);
@@ -61,16 +60,16 @@ class OrderConfirmationTransactionService extends AbstractTransactionService
                 'total_fees' => $order->total_shipping + $order->total_wrapping,
                 'fees' => [
                     'shipping' => $order->total_shipping,
-                    'wrapping' => $order->total_wrapping
+                    'wrapping' => $order->total_wrapping,
                 ],
                 'currency' => (new \Currency($order->id_currency))->symbol,
             ],
             'payment' => [
                 'method' => [
                     'id' => $order->module,
-                    'name' => $order->payment
+                    'name' => $order->payment,
                 ],
-                'due_date' => ValidDateMapper::validDateOrNull($order->invoice_date)
+                'due_date' => ValidDateMapper::validDateOrNull($order->invoice_date),
             ],
             'billing.address' => AddressMapper::mapToArray($invoiceAdress),
             'shipping.address' => AddressMapper::mapToArray($deliveryAddress),
@@ -89,7 +88,7 @@ class OrderConfirmationTransactionService extends AbstractTransactionService
                 'id' => $shipping['id_carrier'],
                 'name' => $shipping['carrier_name'],
                 'url' => $shipping['url'],
-                'tracking_code' => $shipping['tracking_number']
+                'tracking_code' => $shipping['tracking_number'],
             ];
             if (file_exists(_PS_SHIP_IMG_DIR_ . $shipping['id_carrier'] . '.jpg')) {
                 $content['shipping.service']['image_url'] =
@@ -98,9 +97,8 @@ class OrderConfirmationTransactionService extends AbstractTransactionService
             }
         }
 
-
-
         $transaction = new OrderConfirmationTransaction($this->transactionService, $this->contactService, $customer, (new OptInPermissionMapper())->getOrderConfNewPermission());
+
         return $transaction->send($content);
     }
 }

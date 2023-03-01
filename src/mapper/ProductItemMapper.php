@@ -37,7 +37,8 @@ class ProductItemMapper
 
         $product = new \Product((int) $in['product_id'], false, $context->language->id);
         $img = $product->getCover($product->id);
-        $img_url = $context->link->getImageLink(isset($product->link_rewrite) ? $product->link_rewrite : $product->name, (int)$img['id_image']);
+        $img_url = $context->link->getImageLink(isset($product->link_rewrite) ? $product->link_rewrite : $product->name, (int) $img['id_image']);
+
         return [
             'sku' => $product->reference,
             'product_id' => $product->id,
@@ -49,7 +50,7 @@ class ProductItemMapper
             'image_url' => $img_url,
             'quantity' => (int) $in['cart_quantity'],
             'single_price' => doubleval($in['unit_price_tax_incl']),
-            'total' => doubleval($in['total_price_tax_incl'])
+            'total' => doubleval($in['total_price_tax_incl']),
         ];
     }
 

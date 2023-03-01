@@ -1,7 +1,7 @@
 <?php
 
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{xqmaileon}prestashop>xqmaileon_77628f31a235c5cd1e31171898feaa6f'] = 'Maileon-Integration';
 $_MODULE['<{xqmaileon}prestashop>xqmaileon_b9a95a936325fe7307417f7a76da7d50'] = 'Mit diesem Modul verbinden Sie Maileon mit Prestashop.';
 $_MODULE['<{xqmaileon}prestashop>xqmaileon_6b77d2eecadb567e6293ddff9787202b'] = 'Möchten Sie unseren Newsletter abbonieren?';

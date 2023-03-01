@@ -25,5 +25,8 @@
         "prepend-autoloader": false
     },
     "type": "prestashop-module",
-    "license": "ISC"
+    "license": "ISC",
+    "require-dev": {
+        "prestashop/php-dev-tools": "^4.3"
+    }
 }

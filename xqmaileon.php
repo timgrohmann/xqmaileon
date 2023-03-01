@@ -27,20 +27,17 @@
  *  @copyright 2013-2022 XQueue
  *  @license   MIT
  */
-
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 use de\xqueue\maileon\api\client\MaileonAPIException;
 use de\xqueue\maileon\api\client\utils\PingService;
-use PrestaShop\Module\XQMaileon\MaileonRegister;
-use PrestaShop\Module\XQMaileon\Configure\XQConfigureForm;
-
-use PrestaShop\PrestaShop\Adapter\Entity\Module;
-use PrestaShop\PrestaShop\Adapter\Entity\Customer;
-
 use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
+use PrestaShop\Module\XQMaileon\Configure\XQConfigureForm;
+use PrestaShop\Module\XQMaileon\MaileonRegister;
 use PrestaShop\Module\XQMaileon\Transactions\AbandonedCartTransactionService;
 use PrestaShop\Module\XQMaileon\Transactions\OrderConfirmationTransactionService;
+use PrestaShop\PrestaShop\Adapter\Entity\Customer;
+use PrestaShop\PrestaShop\Adapter\Entity\Module;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -65,12 +62,12 @@ class Xqmaileon extends Module
     {
         $this->name = 'xqmaileon';
         $this->tab = 'emailing';
-        $this->version = '1.3.3';
+        $this->version = '1.4.0';
         $this->author = 'XQueue';
         $this->need_instance = 0;
         $this->module_key = '0cffcddc4ae84209f6f434194d3aeb0c';
 
-        /**
+        /*
          * Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
          */
         $this->bootstrap = true;
@@ -80,8 +77,7 @@ class Xqmaileon extends Module
         $this->displayName = $this->l('Maileon Integration');
         $this->description = $this->l('Seamlessly integrate your marketing automation with Maileon.');
 
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
-
+        $this->ps_versions_compliancy = ['min' => '1.7', 'max' => _PS_VERSION_];
 
         $api_key = Configuration::get('XQMAILEON_API_KEY');
         if (!empty($api_key)) {
@@ -114,7 +110,7 @@ class Xqmaileon extends Module
 
     public function uninstall()
     {
-        # foreach (ConfigOptions::ALL_OPTIONS as $k => $v) Configuration::deleteByName($k);
+        // foreach (ConfigOptions::ALL_OPTIONS as $k => $v) Configuration::deleteByName($k);
 
         return parent::uninstall() &&
             AbandonedCartTransactionService::uninstallDatabase();
@@ -125,10 +121,10 @@ class Xqmaileon extends Module
      */
     public function getContent()
     {
-        /**
+        /*
          * If values have been submitted in the form, process.
          */
-        if (((bool)Tools::isSubmit('submitXqmaileonModule')) == true) {
+        if (((bool) Tools::isSubmit('submitXqmaileonModule')) == true) {
             $this->postProcess();
         }
 
@@ -145,25 +141,24 @@ class Xqmaileon extends Module
         $key = \Configuration::get(ConfigOptions::XQMAILEON_API_KEY);
 
         try {
-            $config = array(
+            $config = [
                 'BASE_URI' => 'https://api.maileon.com/1.0',
-                'API_KEY' =>  $key
-            );
+                'API_KEY' => $key,
+            ];
             $pingService = new PingService($config);
             $api_success = $pingService->pingGet()->getStatusCode() == 200;
         } catch (MaileonAPIException $e) {
         }
 
-
         $this->context->smarty->assign('api_success', $api_success);
         $this->context->smarty->assign('api_key_set', !empty($key));
-        $cron_hint = $this->context->link->getModuleLink($this->name, 'cron', array('token' => Configuration::get(ConfigOptions::XQMAILEON_CRON_TOKEN)), Configuration::get('PS_SSL_ENABLED'));
+        $cron_hint = $this->context->link->getModuleLink($this->name, 'cron', ['token' => Configuration::get(ConfigOptions::XQMAILEON_CRON_TOKEN)], Configuration::get('PS_SSL_ENABLED'));
 
         $this->context->smarty->assign('cron_token', $cron_hint);
 
         $webhookToken = Configuration::get(ConfigOptions::XQMAILEON_WEBHOOK_TOKEN);
-        $webhookDoiConfirm = $this->context->link->getModuleLink($this->name, 'webhook', array('token' => $webhookToken, 'type' => 'doi'), Configuration::get('PS_SSL_ENABLED'));
-        $webhookUnsubscribe = $this->context->link->getModuleLink($this->name, 'webhook', array('token' => $webhookToken, 'type' => 'unsubscribe'), Configuration::get('PS_SSL_ENABLED'));
+        $webhookDoiConfirm = $this->context->link->getModuleLink($this->name, 'webhook', ['token' => $webhookToken, 'type' => 'doi'], Configuration::get('PS_SSL_ENABLED'));
+        $webhookUnsubscribe = $this->context->link->getModuleLink($this->name, 'webhook', ['token' => $webhookToken, 'type' => 'unsubscribe'], Configuration::get('PS_SSL_ENABLED'));
 
         $this->context->smarty->assign('webhook_doi_confirm', $webhookDoiConfirm);
         $this->context->smarty->assign('webhook_unsubscribe', $webhookUnsubscribe);
@@ -197,34 +192,35 @@ class Xqmaileon extends Module
 
     public function hookAdditionalCustomerFormFields($params)
     {
-        ## workaround
+        // workaround
 
         $field_name = $this->name . '_' . Xqmaileon::$NEWSLETTER_FIELD;
         $this->context->customer->{$field_name} = $this->context->customer->newsletter;
 
-        $additionalFields = array();
+        $additionalFields = [];
         if (ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_REG_CHECKOUT)) {
-            $additionalFields[] = (new FormField)
+            $additionalFields[] = (new FormField())
                 ->setName(Xqmaileon::$NEWSLETTER_FIELD)
                 ->setType('checkbox')
                 ->setLabel($this->l('Do you want to subscribe to our newsletter?'));
         }
-        $additionalFields[] = (new FormField)
+        $additionalFields[] = (new FormField())
             ->setName(Xqmaileon::$CONTACT_FORM_MARKER_FIELD)
             ->setType('hidden')
             ->setValue(1);
+
         return $additionalFields;
     }
 
     public function hookActionCustomerAccountAdd($params)
     {
-        # new user registered and checked the newsletter field
+        // new user registered and checked the newsletter field
         /**
          * @var Customer
          */
         $customer = $params['newCustomer'];
         if (ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_REG_CHECKOUT) && !empty(Tools::getValue(Xqmaileon::$NEWSLETTER_FIELD))) {
-            # automatically set optin on customer when they have an account and it is configured
+            // automatically set optin on customer when they have an account and it is configured
             if (Configuration::get(ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION) == 1 && !$customer->isGuest()) {
                 $customer->optin = true;
             }
@@ -238,20 +234,21 @@ class Xqmaileon extends Module
      */
     public function hookActionObjectCustomerUpdateBefore($params)
     {
-        # return if not submitted from customer account from,
-        # customer objects may be modified by other parties and not considered
-        # for this plugin
+        // return if not submitted from customer account from,
+        // customer objects may be modified by other parties and not considered
+        // for this plugin
         if (!Tools::isSubmit(Xqmaileon::$CONTACT_FORM_MARKER_FIELD)) {
             return;
         }
 
         /**
          * The new value of the customer object that will be written in the update.
+         *
          * @var Customer
          */
         $customer = $params['object'];
 
-        # retrieves stored state of customer from db
+        // retrieves stored state of customer from db
         $old = new Customer($customer->id);
 
         if ($customer->isGuest()) {
@@ -264,7 +261,7 @@ class Xqmaileon extends Module
         $new_email = Tools::getValue('email');
         $old_email = $old->email;
 
-        # newly subscribed to newsletter: tell maileon
+        // newly subscribed to newsletter: tell maileon
         if ($new_newsletter_state == true && $old_newsletter_state == false) {
             if (Configuration::get(ConfigOptions::XQMAILEON_SUBSCRIPTION_SIGNEDIN_PERMISSION) == 1) {
                 $customer->optin = true;
@@ -274,7 +271,7 @@ class Xqmaileon extends Module
             $customer->newsletter = true;
         }
 
-        # unsubscribed from newsletter: tell maileon
+        // unsubscribed from newsletter: tell maileon
         if ($new_newsletter_state == false && $old_newsletter_state == true) {
             $this->registerer->removeContact($customer);
             $customer->newsletter = false;
@@ -287,14 +284,16 @@ class Xqmaileon extends Module
         }
     }
 
-    # do not send order confirmations from prestashop, use maileon instead
+    // do not send order confirmations from prestashop, use maileon instead
     public function hookActionEmailSendBefore($params)
     {
         if ($params['template'] == 'order_conf' && ConfigOptions::getOptionBool(ConfigOptions::XQMAILEON_SEND_ORDER_CONF)) {
             $order = new \Order($params['templateVars']['{id_order}']);
             $service = new OrderConfirmationTransactionService();
+
             return !$service->sendConfirmation($order);
         }
+
         return true;
     }
 
@@ -305,7 +304,6 @@ class Xqmaileon extends Module
 
     public function hookDisplayFooterBefore($params)
     {
-
         if ($this->context->customer->newsletter) {
             return;
         }
@@ -323,7 +321,7 @@ class Xqmaileon extends Module
             'nw_error' => false,
             'text_a' => \Configuration::get(ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_A),
             'text_b' => \Configuration::get(ConfigOptions::XQMAILEON_NEWSLETTER_SIGNUP_FOOTER_TEXT_B),
-            'value' => ''
+            'value' => '',
         ];
 
         if (Tools::isSubmit('submitNewsletter')) {

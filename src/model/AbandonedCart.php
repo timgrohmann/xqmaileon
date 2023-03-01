@@ -29,11 +29,8 @@
 
 namespace PrestaShop\Module\XQMaileon\Model;
 
-use DateTime;
-
 class AbandonedCart
 {
-
     /**
      * @var int
      */
@@ -45,7 +42,7 @@ class AbandonedCart
     public $id_customer;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     public $date_added;
 
@@ -53,6 +50,6 @@ class AbandonedCart
     {
         $this->id_cart = (int) $sqlResultArray['id_cart'];
         $this->id_customer = (int) $sqlResultArray['id_customer'];
-        $this->date_added = DateTime::createFromFormat('Y-d-m H:i:s', $sqlResultArray['date_add']);
+        $this->date_added = \DateTime::createFromFormat('Y-d-m H:i:s', $sqlResultArray['date_add']);
     }
 }

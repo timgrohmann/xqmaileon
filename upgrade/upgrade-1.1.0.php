@@ -26,7 +26,6 @@
  *  @copyright 2013-2022 XQueue
  *  @license   MIT
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }

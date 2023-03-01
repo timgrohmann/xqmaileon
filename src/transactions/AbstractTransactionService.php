@@ -35,7 +35,6 @@ use PrestaShop\Module\XQMaileon\Configure\ConfigOptions;
 
 abstract class AbstractTransactionService
 {
-
     /**
      * @var TransactionsService
      */
@@ -48,12 +47,12 @@ abstract class AbstractTransactionService
 
     public function __construct()
     {
-        $config = array(
+        $config = [
             'BASE_URI' => 'https://api.maileon.com/1.0',
-            'API_KEY' =>  \Configuration::get(ConfigOptions::XQMAILEON_API_KEY)
-        );
+            'API_KEY' => \Configuration::get(ConfigOptions::XQMAILEON_API_KEY),
+        ];
         $this->transactionService = new TransactionsService($config);
         $this->contactService = new ContactsService($config);
-        # $this->transactionService->setDebug(true);
+        // $this->transactionService->setDebug(true);
     }
 }

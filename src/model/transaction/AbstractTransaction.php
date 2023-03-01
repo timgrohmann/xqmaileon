@@ -36,12 +36,10 @@ use de\xqueue\maileon\api\client\transactions\AttributeType;
 use de\xqueue\maileon\api\client\transactions\Transaction;
 use de\xqueue\maileon\api\client\transactions\TransactionsService;
 use de\xqueue\maileon\api\client\transactions\TransactionType;
-
 use PrestaShop\Module\XQMaileon\Mapper\CustomerContactMapper;
 
 abstract class AbstractTransaction
 {
-
     const TRANSACTION_PREFIX = 'prestashop_';
     const TRANSACTION_SUFFIX = '_1.0';
 
@@ -87,6 +85,7 @@ abstract class AbstractTransaction
         $fqn = explode('\\', get_class($this));
         $name = array_pop($fqn);
         $underscored = \Tools::strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $name));
+
         return self::TRANSACTION_PREFIX . $underscored . self::TRANSACTION_SUFFIX;
     }
 
@@ -126,6 +125,7 @@ abstract class AbstractTransaction
         }
 
         $result = $this->transactionService->createTransactionType($this->getTransactionType());
+
         return $result->isSuccess();
     }
 
@@ -133,6 +133,7 @@ abstract class AbstractTransaction
     {
         if (!$this->checkExistsOrCreate()) {
             error_log('Transaction type ' . $this->getTypeName() . ' cannot be created.');
+
             return false;
         }
 
@@ -146,7 +147,7 @@ abstract class AbstractTransaction
         $maileonTransaction->contact = CustomerContactMapper::mapToContactReference($this->customer);
         $maileonTransaction->content = $content;
 
-        $res = $this->transactionService->createTransactions(array($maileonTransaction));
+        $res = $this->transactionService->createTransactions([$maileonTransaction]);
 
         return $res->isSuccess();
     }

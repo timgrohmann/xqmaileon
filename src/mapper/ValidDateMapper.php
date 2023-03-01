@@ -30,14 +30,11 @@
 
 namespace PrestaShop\Module\XQMaileon\Mapper;
 
-use DateTime;
-
 class ValidDateMapper
 {
-
     public static function validDateOrNull(string $date)
     {
-        if ("0000-00-00 00:00:00" == $date) {
+        if ('0000-00-00 00:00:00' == $date) {
             return null;
         } else {
             return $date;
