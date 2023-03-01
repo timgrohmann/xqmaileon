@@ -63,7 +63,7 @@ class XQMaileonWebhookModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * @return bool Returns true if webhook was handled successfully.
+     * @return bool Returns true if webhook was handled successfully
      */
     public function handleWebhook($body)
     {
